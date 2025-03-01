@@ -1,23 +1,31 @@
-var builder = WebApplication.CreateBuilder(args);
+using TicketService.BL.IOC;
+using TicketService.DAL.IOC;
+using TicketService.Extensions;
+using TicketService.Models;
 
-// Add services to the container.
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGeneration();
 
-var app = builder.Build();
+builder.Services.AddDatabaseConnection(builder.Configuration);
+builder.Services.Configure<JwtSettingsModel>(builder.Configuration.GetSection("JwtSettings"));
 
-// Configure the HTTP request pipeline.
+builder.Services.AddAuthentificationForWebApp(builder.Configuration);
+builder.Services.AddRepositories();
+builder.Services.AddServices();
+
+WebApplication app = builder.Build();
+
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    _ = app.UseSwagger();
+    _ = app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
