@@ -2,3 +2,7 @@ vs/
 **/obj/
 **/bin/
 .vs/
+.vs/
+.vscode/
+.idea/
+Thumbs.db
