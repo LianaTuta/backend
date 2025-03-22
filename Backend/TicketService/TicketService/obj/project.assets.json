@@ -1541,6 +1541,23 @@
           }
         }
       },
+      "RepoDb.SqlServer/1.13.1": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Data.SqlClient": "5.1.0",
+          "RepoDb": "1.13.1"
+        },
+        "compile": {
+          "lib/net7.0/RepoDb.SqlServer.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net7.0/RepoDb.SqlServer.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "runtime.native.System.Data.SqlClient.sni/4.4.0": {
         "type": "package",
         "dependencies": {
@@ -2593,6 +2610,7 @@
           "Microsoft.EntityFrameworkCore.SqlServer": "9.0.3",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.3",
           "RepoDb": "1.13.1",
+          "RepoDb.SqlServer": "1.13.1",
           "System.Data.SqlClient": "4.9.0",
           "TicketService.Models": "1.0.0"
         },
@@ -5342,6 +5360,24 @@
         "lib/netstandard2.0/RepoDb.xml",
         "repodb.1.13.1.nupkg.sha512",
         "repodb.nuspec"
+      ]
+    },
+    "RepoDb.SqlServer/1.13.1": {
+      "sha512": "olH+3JNsNMr36Xr+CE9mitSdeY9ECyq+CTJU5Mq+BF/CW/mTQpXXmG2FgogAdt6pxNDfzMylwElGJPGXtQvoZw==",
+      "type": "package",
+      "path": "repodb.sqlserver/1.13.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "lib/net6.0/RepoDb.SqlServer.dll",
+        "lib/net6.0/RepoDb.SqlServer.xml",
+        "lib/net7.0/RepoDb.SqlServer.dll",
+        "lib/net7.0/RepoDb.SqlServer.xml",
+        "lib/netstandard2.0/RepoDb.SqlServer.dll",
+        "lib/netstandard2.0/RepoDb.SqlServer.xml",
+        "repodb.sqlserver.1.13.1.nupkg.sha512",
+        "repodb.sqlserver.nuspec"
       ]
     },
     "runtime.native.System.Data.SqlClient.sni/4.4.0": {

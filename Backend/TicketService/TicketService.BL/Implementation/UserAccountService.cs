@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.Net;
 using TicketService.BL.Interface;
 using TicketService.DAL.Interface;
 using TicketService.Models;
+using TicketService.Models.Exceptions;
 
 namespace TicketService.BL.Implementation
 {
@@ -45,7 +47,7 @@ namespace TicketService.BL.Implementation
             //!!!!! exceptions need to be changed ugly
             if (user != null)
             {
-                throw new Exception("An account with the same address already exists");
+                throw new CustomException( "An account with the same address already exists", HttpStatusCode.BadRequest);
             }
         }
 

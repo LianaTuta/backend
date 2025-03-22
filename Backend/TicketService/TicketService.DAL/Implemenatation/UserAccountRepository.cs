@@ -22,7 +22,7 @@ namespace TicketService.DAL.Implemenatation
 
         public async Task<UserModel?> GetUserByEmailAsync(string email)
         {
-             return (await _dbConnection.QueryAsync<UserModel>(u => u.Email == email)).FirstOrDefault();
+            return (await _dbConnection.QueryAsync<UserModel>(u => u.Email == email))?.FirstOrDefault();
 
         }
 

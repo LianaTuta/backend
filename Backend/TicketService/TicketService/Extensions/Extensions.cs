@@ -3,8 +3,10 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
+using RepoDb;
 using System.Data;
 using System.Text;
+using TicketService.Middleware;
 using TicketService.Models;
 
 
@@ -39,7 +41,15 @@ namespace TicketService.Extensions
         {
             _ = service.AddTransient<IDbConnection>(sp =>
                  new SqlConnection(configuration.GetConnectionString("DefaultConnection")));
+            GlobalConfiguration.Setup().UseSqlServer();
             return service;
+        }
+
+        public static IApplicationBuilder UserMiddleware(this IApplicationBuilder builder)
+        {
+           
+            builder.UseMiddleware<ExceptionMiddleware>();
+            return builder;
         }
     }
 }

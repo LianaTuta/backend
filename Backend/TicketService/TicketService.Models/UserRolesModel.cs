@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TicketService.Models
 {
+    [Table("UserRoles")]
     public class UserRolesModel
     {
         public int Id { get; set; }

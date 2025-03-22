@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "oD3y8MrlVsA=",
+  "dgSpecHash": "eutQ3gQR3Zo=",
   "success": true,
   "projectFilePath": "C:\\tot\\licenta\\backend\\Backend\\TicketService\\TicketService\\TicketService.csproj",
   "expectedPackageFiles": [
@@ -79,6 +79,7 @@
     "C:\\Users\\user\\.nuget\\packages\\microsoft.win32.registry\\4.5.0\\microsoft.win32.registry.4.5.0.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\mono.texttemplating\\3.0.0\\mono.texttemplating.3.0.0.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\repodb\\1.13.1\\repodb.1.13.1.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\repodb.sqlserver\\1.13.1\\repodb.sqlserver.1.13.1.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\runtime.win-x64.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-x64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",

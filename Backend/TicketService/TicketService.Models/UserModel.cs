@@ -1,7 +1,9 @@
-﻿using TicketService.Models.Enum;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using TicketService.Models.Enum;
 
 namespace TicketService.Models
 {
+    [Table("Users")]
     public class UserModel
     {
         public int Id { get; set; }

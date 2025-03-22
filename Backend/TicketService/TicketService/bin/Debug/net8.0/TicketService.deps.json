@@ -997,6 +997,18 @@
           }
         }
       },
+      "RepoDb.SqlServer/1.13.1": {
+        "dependencies": {
+          "Microsoft.Data.SqlClient": "6.0.1",
+          "RepoDb": "1.13.1"
+        },
+        "runtime": {
+          "lib/net7.0/RepoDb.SqlServer.dll": {
+            "assemblyVersion": "1.13.1.0",
+            "fileVersion": "1.13.1.0"
+          }
+        }
+      },
       "runtime.native.System.Data.SqlClient.sni/4.4.0": {
         "dependencies": {
           "runtime.win-arm64.runtime.native.System.Data.SqlClient.sni": "4.4.0",
@@ -1546,6 +1558,7 @@
           "Microsoft.EntityFrameworkCore.SqlServer": "9.0.3",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.3",
           "RepoDb": "1.13.1",
+          "RepoDb.SqlServer": "1.13.1",
           "System.Data.SqlClient": "4.9.0",
           "TicketService.Models": "1.0.0"
         },
@@ -2109,6 +2122,13 @@
       "sha512": "sha512-NdYPp9t42AtXsQyPG8tK2ADtnTrd945hWSF+S0ba64vPvUhP4cTScbnszq/afb2WHIMRzRDoMPG/6t5O6lXpEg==",
       "path": "repodb/1.13.1",
       "hashPath": "repodb.1.13.1.nupkg.sha512"
+    },
+    "RepoDb.SqlServer/1.13.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-olH+3JNsNMr36Xr+CE9mitSdeY9ECyq+CTJU5Mq+BF/CW/mTQpXXmG2FgogAdt6pxNDfzMylwElGJPGXtQvoZw==",
+      "path": "repodb.sqlserver/1.13.1",
+      "hashPath": "repodb.sqlserver.1.13.1.nupkg.sha512"
     },
     "runtime.native.System.Data.SqlClient.sni/4.4.0": {
       "type": "package",
