@@ -1,11 +1,12 @@
 {
   "Version": 1,
-  "Hash": "APQU/CTb4bR2NQm97fQbhi4APotTeza668NqVb55tKk=",
+  "Hash": "N7Q8PLsbu2gdg2vjvYe7aUxez7MAfcd4ruCvx+H9TwE=",
   "Source": "TicketService",
   "BasePath": "_content/TicketService",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
   "DiscoveryPatterns": [],
-  "Assets": []
+  "Assets": [],
+  "Endpoints": []
 }

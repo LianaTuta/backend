@@ -28,7 +28,7 @@ namespace TicketService.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<string> Login(LoginModel loginDetails)
+        public async Task<BearerTokenModel> Login(LoginModel loginDetails)
         {
             return loginDetails == null
                 ? throw new ArgumentNullException(nameof(loginDetails))
@@ -36,7 +36,7 @@ namespace TicketService.Controllers
         }
 
         [HttpGet("test")]
-        [Authorize]
+        [AllowAnonymous]
         public string TestAuth()
         {
             return "Test";
