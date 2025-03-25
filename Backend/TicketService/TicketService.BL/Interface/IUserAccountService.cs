@@ -1,10 +1,11 @@
-﻿using TicketService.Models;
+﻿using TicketService.Models.RequestModels;
+using TicketService.Models.ResponseModels;
 
 namespace TicketService.BL.Interface
 {
     public interface IUserAccountService
     {
-        public Task CreateAccount(UserModel user);
-        public Task<BearerTokenModel> LoginAsync(LoginModel login);
+        Task CreateAccount(CreateUserRequestModel user);
+        Task<BearerTokenModel> LoginAsync(LoginModel login);
     }
 }

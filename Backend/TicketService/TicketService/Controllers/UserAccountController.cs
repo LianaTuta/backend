@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TicketService.BL.Interface;
-using TicketService.Models;
+using TicketService.Models.RequestModels;
+using TicketService.Models.ResponseModels;
 
 namespace TicketService.Controllers
 {
@@ -17,22 +18,17 @@ namespace TicketService.Controllers
 
         [HttpPost("create-account")]
         [AllowAnonymous]
-        public async Task CreateAccount(UserModel userModel)
+        public async Task CreateAccount(CreateUserRequestModel userModel)
         {
-            if (userModel == null)
-            {
-                throw new ArgumentNullException(nameof(userModel));
-            }
             await _userAccountService.CreateAccount(userModel);
         }
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<BearerTokenModel> Login(LoginModel loginDetails)
+        public async Task<BearerTokenModel> LoginAsync(LoginModel loginDetails)
         {
-            return loginDetails == null
-                ? throw new ArgumentNullException(nameof(loginDetails))
-                : await _userAccountService.LoginAsync(loginDetails);
+
+            return await _userAccountService.LoginAsync(loginDetails);
         }
 
         [HttpGet("test")]

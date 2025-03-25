@@ -3,11 +3,11 @@ using Dapper;
 using RepoDb;
 using System.Data;
 using TicketService.DAL.Interface;
-using TicketService.Models;
+using TicketService.Models.DBModels;
 
 namespace TicketService.DAL.Implemenatation
 {
-    public  class UserAccountRepository:IUserAcccountRepository
+    public class UserAccountRepository : IUserAcccountRepository
     {
         private readonly IDbConnection _dbConnection;
 
@@ -17,7 +17,7 @@ namespace TicketService.DAL.Implemenatation
         }
         public async Task InserUserAsync(UserModel userModel)
         {
-            await _dbConnection.InsertAsync(userModel);   
+            _ = await _dbConnection.InsertAsync(userModel);
         }
 
         public async Task<UserModel?> GetUserByEmailAsync(string email)
@@ -26,7 +26,7 @@ namespace TicketService.DAL.Implemenatation
 
         }
 
-        public async Task<UserRolesModel?> GetUserRolesById(int id)
+        public async Task<UserRolesModel> GetUserRolesById(int id)
         {
             return (await _dbConnection.QueryAsync<UserRolesModel>(u => u.Id == id)).FirstOrDefault();
         }

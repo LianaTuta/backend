@@ -41,14 +41,16 @@ namespace TicketService.Extensions
         {
             _ = service.AddTransient<IDbConnection>(sp =>
                  new SqlConnection(configuration.GetConnectionString("DefaultConnection")));
-            GlobalConfiguration.Setup().UseSqlServer();
+            _ = GlobalConfiguration.Setup().UseSqlServer();
             return service;
         }
 
         public static IApplicationBuilder UserMiddleware(this IApplicationBuilder builder)
         {
-           
-            builder.UseMiddleware<ExceptionMiddleware>();
+
+            _ = builder.UseMiddleware<ResponseMiddleware>();
+            _ = builder.UseMiddleware<ExceptionMiddleware>();
+
             return builder;
         }
     }

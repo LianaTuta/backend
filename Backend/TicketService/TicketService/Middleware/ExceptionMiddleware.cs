@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using System.Text.Json;
 using TicketService.Models.Exceptions;
 
 namespace TicketService.Middleware
@@ -15,7 +14,7 @@ namespace TicketService.Middleware
             _logger = logger;
         }
 
-        public async Task InvokeAsync(HttpContext httpContext)  
+        public async Task InvokeAsync(HttpContext httpContext)
         {
             try
             {
@@ -37,7 +36,7 @@ namespace TicketService.Middleware
         {
             httpContext.Response.StatusCode = (int)statusCode;
             httpContext.Response.ContentType = "application/json";
-            var response = JsonSerializer.Serialize(new ApiResult<object>(new ErrorMesasge() { Message = message}));
+            string response = System.Text.Json.JsonSerializer.Serialize(new ApiResult<object>(new ErrorMesasge() { Message = message }));
             await httpContext.Response.WriteAsync(response);
         }
     }

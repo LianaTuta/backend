@@ -2,8 +2,10 @@
 using System.Net;
 using TicketService.BL.Interface;
 using TicketService.DAL.Interface;
-using TicketService.Models;
+using TicketService.Models.DBModels;
 using TicketService.Models.Exceptions;
+using TicketService.Models.RequestModels;
+using TicketService.Models.ResponseModels;
 
 namespace TicketService.BL.Implementation
 {
@@ -19,19 +21,36 @@ namespace TicketService.BL.Implementation
             _jwtService = jwtService;
         }
 
-        public async Task CreateAccount(UserModel user)
+        public async Task CreateAccount(CreateUserRequestModel user)
         {
             await CheckIfUserExists(user.Email);
+
             string hashedPassowrd = HashPassword(user.Password);
-            user.Password = hashedPassowrd;
-            await _userAcccountRepository.InserUserAsync(user);
+            UserModel newUser = new()
+            {
+                Email = user.Email,
+                FirstName = user.FirstName,
+                MiddleName = user.LastName,
+                LastName = user.LastName,
+                LastModifiedDate = DateTime.UtcNow,
+                CreatedDate = DateTime.UtcNow,
+                BirthDate = user.BirthDate,
+                EmailConfirmed = false,
+                Password = hashedPassowrd,
+                RoleId = user.RoleId,
+
+            };
+            await _userAcccountRepository.InserUserAsync(newUser);
         }
+
 
         public async Task<BearerTokenModel> LoginAsync(LoginModel login)
         {
             UserModel? userSaved = await _userAcccountRepository.GetUserByEmailAsync(login.Email);
-            //!!!!! check for this if 
-            _ = VerifyPassword(userSaved.Password, login.Password);
+            if (userSaved == null || VerifyPassword(userSaved.Password, login.Password) == false)
+            {
+                throw new CustomException("Invalid credentials", HttpStatusCode.BadRequest);
+            }
             UserRolesModel? role = await _userAcccountRepository.GetUserRolesById((int)userSaved.RoleId);
             return new BearerTokenModel()
             {
@@ -44,10 +63,9 @@ namespace TicketService.BL.Implementation
         private async Task CheckIfUserExists(string email)
         {
             UserModel? user = await _userAcccountRepository.GetUserByEmailAsync(email);
-            //!!!!! exceptions need to be changed ugly
             if (user != null)
             {
-                throw new CustomException( "An account with the same address already exists", HttpStatusCode.BadRequest);
+                throw new CustomException("An account with the same address already exists", HttpStatusCode.BadRequest);
             }
         }
 
