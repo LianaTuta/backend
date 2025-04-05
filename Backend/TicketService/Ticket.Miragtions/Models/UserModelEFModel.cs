@@ -1,6 +1,4 @@
-﻿using TicketService.Models;
-
-namespace TicketService.Migrations.Models
+﻿namespace TicketService.Migrations.Models
 {
     public class UserModelEF
     {

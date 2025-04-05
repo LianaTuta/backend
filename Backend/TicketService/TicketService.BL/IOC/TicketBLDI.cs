@@ -10,6 +10,7 @@ namespace TicketService.BL.IOC
         {
             _ = services.AddTransient<IUserAccountService, UserAccountService>();
             _ = services.AddTransient<IJwtService, JwtService>();
+            _ = services.AddTransient<IEventService, EventService>();
             return services;
         }
     }

@@ -30,7 +30,7 @@ namespace TicketService.Middleware
 
                 object? result = JsonConvert.DeserializeObject(readToEnd);
                 object? response = result;
-                if (httpContext.Response.StatusCode is not ((int)HttpStatusCode.Created) and not ((int)HttpStatusCode.OK))
+                if (httpContext.Response.StatusCode is not ((int)HttpStatusCode.Created) and not ((int)HttpStatusCode.OK) and not ((int)HttpStatusCode.NoContent))
                 {
                     JsonDocument jsonDocument = JsonDocument.Parse(readToEnd);
                     if (jsonDocument.RootElement.TryGetProperty("errors", out _))
@@ -45,7 +45,9 @@ namespace TicketService.Middleware
                 }
                 else
                 {
-                    await httpContext.Response.WriteAsync(JsonConvert.SerializeObject(response));
+                    var apiResult = new ApiResult<dynamic>(result);
+                    var json = JsonConvert.SerializeObject(apiResult, Formatting.Indented);
+                    await httpContext.Response.WriteAsync(json); 
                 }
             }
             catch (CustomException ex)

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using TicketService.Models.Enum;
 
 namespace TicketService.Models.DBModels
@@ -6,6 +7,8 @@ namespace TicketService.Models.DBModels
     [Table("Users")]
     public class UserModel
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public required string Email { get; set; }
         public required string Password { get; set; }
