@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TicketService.Migrations.Extensions;
 using TicketService.Migrations.Models;
 
 
@@ -24,10 +23,9 @@ public class TicketDbContext : DbContext
            .HasForeignKey(u => u.RoleId);
 
         _ = modelBuilder.Entity<UserModelEF>().Property(u => u.RoleId).HasColumnName("RoleId");
+        _ = modelBuilder.Entity<UserModelEF>().Property(u => u.Id).ValueGeneratedOnAdd().UseIdentityColumn();
         _ = modelBuilder.Entity<UserRolesModelEF>().ToTable("UserRoles");
 
-        modelBuilder.ApplySequence<UserRolesModelEF>("RoleIdSeq", "Id");
-        modelBuilder.ApplySequence<UserModelEF>("UserIdSeq", "Id");
 
         _ = modelBuilder.Entity<UserRolesModelEF>().HasData(new UserRolesModelEF() { Id = 1, Name = "Manager" });
         _ = modelBuilder.Entity<UserRolesModelEF>().HasData(new UserRolesModelEF() { Id = 2, Name = "Customer" });
