@@ -23,6 +23,7 @@ namespace TicketService.BL.Implementation
                 Name = addEventRequest.Name,
                 Description = addEventRequest.Description,
                 EventTypeId = addEventRequest.EventTypeId,
+                ImagePath = addEventRequest.ImagePath,
                 Created = DateTime.UtcNow,
                 LastUpdated = DateTime.UtcNow,
             };
@@ -44,6 +45,7 @@ namespace TicketService.BL.Implementation
                 Name = addEventRequest.Name,
                 Description = addEventRequest.Description,
                 EventTypeId = addEventRequest.EventTypeId,
+                ImagePath = addEventRequest.ImagePath,
                 Created = eventModel.Created,
                 LastUpdated = DateTime.UtcNow,
             };

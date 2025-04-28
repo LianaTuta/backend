@@ -7,6 +7,8 @@
         public string? Description { get; set; }
         public int EventTypeId { get; set; }
         public required EventTypeEFModel EventType { get; set; }
+
+        public string ImagePath { get; set; }
         public DateTime Created { get; set; }
         public DateTime LastUpdated { get; set; }
 
