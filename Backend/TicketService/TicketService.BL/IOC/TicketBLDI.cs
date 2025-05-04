@@ -11,6 +11,7 @@ namespace TicketService.BL.IOC
             _ = services.AddTransient<IUserAccountService, UserAccountService>();
             _ = services.AddTransient<IJwtService, JwtService>();
             _ = services.AddTransient<IEventService, EventService>();
+            _ = services.AddTransient<IOrderService, OrderService>();
             return services;
         }
     }

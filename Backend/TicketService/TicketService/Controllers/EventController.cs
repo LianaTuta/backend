@@ -2,6 +2,7 @@
 using TicketService.BL.Interface;
 using TicketService.Models.DBModels;
 using TicketService.Models.RequestModels.Event;
+using TicketService.Models.ResponseModels;
 
 namespace TicketService.Controllers
 {
@@ -23,7 +24,7 @@ namespace TicketService.Controllers
         }
 
         [HttpGet()]
-        public async Task<List<EventModel>> GetEventsListAsync()
+        public async Task<List<EventsResponseModel>> GetEventsListAsync()
         {
             return await _eventService.GetEventListAsync();
         }
@@ -38,6 +39,18 @@ namespace TicketService.Controllers
         public async Task DeleteEventAsync(int id)
         {
             await _eventService.DeleteAsync(id);
+        }
+
+        [HttpPost("add-event-details/{id}")]
+        public async Task AddEventDetails(int id, AddEventDetailsRequest addEventRequest)
+        {
+            await _eventService.AddEventDetailsAsync(id, addEventRequest);
+        }
+
+        [HttpGet("event-details/{id}")]
+        public async Task<EventDetailsModel> GetEventDetailsAsync(int id)
+        {
+            return await _eventService.GetEventDetailAsync(id);
         }
     }
 }

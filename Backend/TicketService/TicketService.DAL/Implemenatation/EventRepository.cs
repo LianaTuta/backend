@@ -1,6 +1,6 @@
-﻿using Dapper;
+﻿using System.Data;
+using Dapper;
 using RepoDb;
-using System.Data;
 using TicketService.DAL.Interface;
 using TicketService.Models.DBModels;
 
@@ -15,9 +15,10 @@ namespace TicketService.DAL.Implemenatation
             _dbConnection = dbConnection;
         }
 
-        public async Task InserEventAsync(EventModel eventModel)
+        public async Task<int> InserEventAsync(EventModel eventModel)
         {
-            _ = await _dbConnection.InsertAsync(eventModel);
+            int id = await _dbConnection.InsertAsync<EventModel, int>(eventModel);
+            return id;
         }
 
         public async Task EditEventAsync(EventModel eventModel)
@@ -56,6 +57,19 @@ namespace TicketService.DAL.Implemenatation
 
             return (await _dbConnection.QueryAsync<EventModel>(u => u.Id == id)).FirstOrDefault();
         }
+
+
+        public async Task InserEventDetailsAsync(EventDetailsModel eventDetails)
+        {
+            _ = await _dbConnection.InsertAsync(eventDetails);
+        }
+
+        public async Task<EventDetailsModel?> GetEventDetailsByEventIdAsync(int eventId)
+        {
+
+            return (await _dbConnection.QueryAsync<EventDetailsModel>(u => u.EventId == eventId)).FirstOrDefault();
+        }
+
 
     }
 }

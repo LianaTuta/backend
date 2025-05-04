@@ -1,4 +1,4 @@
-﻿namespace TicketService.Models
+﻿namespace TicketService.Models.Configuration
 {
     public class JwtSettingsModel
     {

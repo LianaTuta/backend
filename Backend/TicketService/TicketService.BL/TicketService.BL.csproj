@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TicketService.ApiClient\TicketService.ApiClient.csproj" />
     <ProjectReference Include="..\TicketService.DAL\TicketService.DAL.csproj" />
     <ProjectReference Include="..\TicketService.Models\TicketService.Models.csproj" />
   </ItemGroup>

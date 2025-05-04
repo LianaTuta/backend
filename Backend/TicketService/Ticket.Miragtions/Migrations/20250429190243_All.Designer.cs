@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace TicketService.Migrations.Migrations
 {
     [DbContext(typeof(TicketDbContext))]
-    [Migration("20250427114306_First")]
-    partial class First
+    [Migration("20250429190243_All")]
+    partial class All
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,6 +62,10 @@ namespace TicketService.Migrations.Migrations
                     b.Property<int>("EventTypeId")
                         .HasColumnType("int");
 
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("LastUpdated")
                         .HasColumnType("datetime2");
 
@@ -89,6 +93,28 @@ namespace TicketService.Migrations.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("EventType");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Festival"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Theatre"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Party"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Show"
+                        });
                 });
 
             modelBuilder.Entity("TicketService.Migrations.Models.UserModelEF", b =>

@@ -4,7 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using TicketService.BL.Interface;
-using TicketService.Models;
+using TicketService.Models.Configuration;
 
 namespace TicketService.BL.Implementation
 {

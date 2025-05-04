@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace TicketService.Migrations.Migrations
 {
     [DbContext(typeof(TicketDbContext))]
-    [Migration("20250427140711_Second")]
-    partial class Second
+    [Migration("20250429195612_Order")]
+    partial class Order
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -93,6 +93,57 @@ namespace TicketService.Migrations.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("EventType");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Festival"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Theatre"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Party"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Show"
+                        });
+                });
+
+            modelBuilder.Entity("TicketService.Migrations.Models.OrderEFModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EventId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Order");
                 });
 
             modelBuilder.Entity("TicketService.Migrations.Models.UserModelEF", b =>
@@ -194,6 +245,25 @@ namespace TicketService.Migrations.Migrations
                         .IsRequired();
 
                     b.Navigation("EventType");
+                });
+
+            modelBuilder.Entity("TicketService.Migrations.Models.OrderEFModel", b =>
+                {
+                    b.HasOne("TicketService.Migrations.Models.EventEFModel", "Event")
+                        .WithMany()
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TicketService.Migrations.Models.UserModelEF", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TicketService.Migrations.Models.UserModelEF", b =>

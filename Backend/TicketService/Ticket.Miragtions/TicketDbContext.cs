@@ -9,6 +9,7 @@ public class TicketDbContext : DbContext
     public DbSet<EventTypeEFModel> EventType { get; set; }
     public DbSet<EventEFModel> Event { get; set; }
     public DbSet<EventDetailsEFModel> EventDetails { get; set; }
+    public DbSet<OrderEFModel> Order { get; set; }
     public TicketDbContext(DbContextOptions<TicketDbContext> options)
         : base(options)
     { }
@@ -29,6 +30,11 @@ public class TicketDbContext : DbContext
 
         _ = modelBuilder.Entity<UserRolesModelEF>().HasData(new UserRolesModelEF() { Id = 1, Name = "Manager" });
         _ = modelBuilder.Entity<UserRolesModelEF>().HasData(new UserRolesModelEF() { Id = 2, Name = "Customer" });
+
+        _ = modelBuilder.Entity<EventTypeEFModel>().HasData(new EventTypeEFModel() { Id = 1, Name = "Festival" });
+        _ = modelBuilder.Entity<EventTypeEFModel>().HasData(new EventTypeEFModel() { Id = 2, Name = "Theatre" });
+        _ = modelBuilder.Entity<EventTypeEFModel>().HasData(new EventTypeEFModel() { Id = 3, Name = "Party" });
+        _ = modelBuilder.Entity<EventTypeEFModel>().HasData(new EventTypeEFModel() { Id = 4, Name = "Show" });
         base.OnModelCreating(modelBuilder);
     }
 

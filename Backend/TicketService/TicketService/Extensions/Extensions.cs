@@ -1,13 +1,15 @@
 ﻿
 
+using System.Data;
+using System.Text;
+using Google.Apis.Auth.OAuth2;
+using Google.Cloud.Storage.V1;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
 using RepoDb;
-using System.Data;
-using System.Text;
 using TicketService.Middleware;
-using TicketService.Models;
+using TicketService.Models.Configuration;
 
 
 namespace TicketService.Extensions
@@ -37,12 +39,12 @@ namespace TicketService.Extensions
             return service;
         }
 
-        public static IServiceCollection AddDatabaseConnection(this IServiceCollection service, IConfiguration configuration)
+        public static IServiceCollection AddDatabaseConnection(this IServiceCollection services, IConfiguration configuration)
         {
-            _ = service.AddTransient<IDbConnection>(sp =>
+            _ = services.AddTransient<IDbConnection>(sp =>
                  new SqlConnection(configuration.GetConnectionString("DefaultConnection")));
             _ = GlobalConfiguration.Setup().UseSqlServer();
-            return service;
+            return services;
         }
 
         public static IApplicationBuilder UserMiddleware(this IApplicationBuilder builder)
@@ -52,6 +54,24 @@ namespace TicketService.Extensions
             _ = builder.UseMiddleware<ExceptionMiddleware>();
 
             return builder;
+        }
+
+        public static IServiceCollection AddClientGoogle(this IServiceCollection services, IConfiguration configuration)
+        {
+            _ = services.AddTransient(provider =>
+            {
+                GoogleBucketConfigurationModel? credentialPath = configuration.GetSection("GoogleCloud").Get<GoogleBucketConfigurationModel>();
+                GoogleCredential credential = GoogleCredential.FromFile(credentialPath.CredentialFile);
+                return StorageClient.Create(credential);
+            });
+            _ = services.AddTransient(provider =>
+            {
+                GoogleBucketConfigurationModel? credentialPath = configuration.GetSection("GoogleCloud").Get<GoogleBucketConfigurationModel>();
+                GoogleCredential credential = GoogleCredential.FromFile(credentialPath.CredentialFile);
+                return UrlSigner.FromCredential(credential);
+            });
+
+            return services;
         }
     }
 }

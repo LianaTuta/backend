@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketService.Models", "Tic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketService.Migrations", "Ticket.Miragtions\TicketService.Migrations.csproj", "{205E9E7F-EBF9-491E-A14C-C9424BA7375D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketService.ApiClient", "TicketService.ApiClient\TicketService.ApiClient.csproj", "{B6BE6389-764F-41C1-8F3F-E553F9D10F28}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{205E9E7F-EBF9-491E-A14C-C9424BA7375D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{205E9E7F-EBF9-491E-A14C-C9424BA7375D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{205E9E7F-EBF9-491E-A14C-C9424BA7375D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6BE6389-764F-41C1-8F3F-E553F9D10F28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6BE6389-764F-41C1-8F3F-E553F9D10F28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6BE6389-764F-41C1-8F3F-E553F9D10F28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6BE6389-764F-41C1-8F3F-E553F9D10F28}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
