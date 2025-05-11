@@ -21,7 +21,7 @@ namespace TicketService.Migrations.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("TicketService.Migrations.Models.EventDetailsEFModel", b =>
+            modelBuilder.Entity("TicketService.Migrations.Models.Events.ArtistEFModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -29,11 +29,74 @@ namespace TicketService.Migrations.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Artist");
+                });
+
+            modelBuilder.Entity("TicketService.Migrations.Models.Events.ArtistScheduleEFModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ArtistId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EventScheduleId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArtistId");
+
+                    b.HasIndex("EventScheduleId");
+
+                    b.ToTable("ArtistSchedule");
+                });
+
+            modelBuilder.Entity("TicketService.Migrations.Models.Events.EventDetailsEFModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("EventId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TotalNumberSeats")
-                        .HasColumnType("int");
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -42,7 +105,7 @@ namespace TicketService.Migrations.Migrations
                     b.ToTable("EventDetails");
                 });
 
-            modelBuilder.Entity("TicketService.Migrations.Models.EventEFModel", b =>
+            modelBuilder.Entity("TicketService.Migrations.Models.Events.EventEFModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -50,7 +113,10 @@ namespace TicketService.Migrations.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateUpdated")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -58,9 +124,6 @@ namespace TicketService.Migrations.Migrations
 
                     b.Property<int>("EventTypeId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("LastUpdated")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -72,13 +135,84 @@ namespace TicketService.Migrations.Migrations
                     b.ToTable("Event");
                 });
 
-            modelBuilder.Entity("TicketService.Migrations.Models.EventTypeEFModel", b =>
+            modelBuilder.Entity("TicketService.Migrations.Models.Events.EventPriceEFModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<int>("TicketId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TicketId");
+
+                    b.ToTable("EventPrice");
+                });
+
+            modelBuilder.Entity("TicketService.Migrations.Models.Events.EventScheduleEFModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EventId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("EventSchedule");
+                });
+
+            modelBuilder.Entity("TicketService.Migrations.Models.Events.EventTypeEFModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateUpdated")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -91,26 +225,52 @@ namespace TicketService.Migrations.Migrations
                         new
                         {
                             Id = 1,
+                            DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Festival"
                         },
                         new
                         {
                             Id = 2,
+                            DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Theatre"
                         },
                         new
                         {
                             Id = 3,
+                            DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Party"
                         },
                         new
                         {
                             Id = 4,
+                            DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Show"
                         });
                 });
 
-            modelBuilder.Entity("TicketService.Migrations.Models.OrderEFModel", b =>
+            modelBuilder.Entity("TicketService.Migrations.Models.Events.TicketCategoryEFModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Name")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TicketCategory");
+                });
+
+            modelBuilder.Entity("TicketService.Migrations.Models.Order.OrderEFModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -121,22 +281,59 @@ namespace TicketService.Migrations.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("EventId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("TicketId")
+                        .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EventId");
+                    b.HasIndex("TicketId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("Order");
+                });
+
+            modelBuilder.Entity("TicketService.Migrations.Models.User.TicketEFModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("EventScheduleId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TicketCategoryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventScheduleId");
+
+                    b.HasIndex("TicketCategoryId");
+
+                    b.ToTable("Ticket");
                 });
 
             modelBuilder.Entity("TicketService.Migrations.Models.UserModelEF", b =>
@@ -150,7 +347,10 @@ namespace TicketService.Migrations.Migrations
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateUpdated")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
@@ -163,9 +363,6 @@ namespace TicketService.Migrations.Migrations
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -218,9 +415,28 @@ namespace TicketService.Migrations.Migrations
                         });
                 });
 
-            modelBuilder.Entity("TicketService.Migrations.Models.EventDetailsEFModel", b =>
+            modelBuilder.Entity("TicketService.Migrations.Models.Events.ArtistScheduleEFModel", b =>
                 {
-                    b.HasOne("TicketService.Migrations.Models.EventTypeEFModel", "Event")
+                    b.HasOne("TicketService.Migrations.Models.Events.ArtistEFModel", "Artist")
+                        .WithMany()
+                        .HasForeignKey("ArtistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TicketService.Migrations.Models.Events.EventScheduleEFModel", "EventSchedule")
+                        .WithMany()
+                        .HasForeignKey("EventScheduleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Artist");
+
+                    b.Navigation("EventSchedule");
+                });
+
+            modelBuilder.Entity("TicketService.Migrations.Models.Events.EventDetailsEFModel", b =>
+                {
+                    b.HasOne("TicketService.Migrations.Models.Events.EventEFModel", "Event")
                         .WithMany()
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -229,9 +445,9 @@ namespace TicketService.Migrations.Migrations
                     b.Navigation("Event");
                 });
 
-            modelBuilder.Entity("TicketService.Migrations.Models.EventEFModel", b =>
+            modelBuilder.Entity("TicketService.Migrations.Models.Events.EventEFModel", b =>
                 {
-                    b.HasOne("TicketService.Migrations.Models.EventTypeEFModel", "EventType")
+                    b.HasOne("TicketService.Migrations.Models.Events.EventTypeEFModel", "EventType")
                         .WithMany()
                         .HasForeignKey("EventTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -240,11 +456,33 @@ namespace TicketService.Migrations.Migrations
                     b.Navigation("EventType");
                 });
 
-            modelBuilder.Entity("TicketService.Migrations.Models.OrderEFModel", b =>
+            modelBuilder.Entity("TicketService.Migrations.Models.Events.EventPriceEFModel", b =>
                 {
-                    b.HasOne("TicketService.Migrations.Models.EventEFModel", "Event")
+                    b.HasOne("TicketService.Migrations.Models.User.TicketEFModel", "Ticket")
+                        .WithMany()
+                        .HasForeignKey("TicketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Ticket");
+                });
+
+            modelBuilder.Entity("TicketService.Migrations.Models.Events.EventScheduleEFModel", b =>
+                {
+                    b.HasOne("TicketService.Migrations.Models.Events.EventEFModel", "Event")
                         .WithMany()
                         .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+                });
+
+            modelBuilder.Entity("TicketService.Migrations.Models.Order.OrderEFModel", b =>
+                {
+                    b.HasOne("TicketService.Migrations.Models.User.TicketEFModel", "Ticket")
+                        .WithMany()
+                        .HasForeignKey("TicketId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -254,9 +492,28 @@ namespace TicketService.Migrations.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Event");
+                    b.Navigation("Ticket");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("TicketService.Migrations.Models.User.TicketEFModel", b =>
+                {
+                    b.HasOne("TicketService.Migrations.Models.Events.EventScheduleEFModel", "EventSchedule")
+                        .WithMany()
+                        .HasForeignKey("EventScheduleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TicketService.Migrations.Models.Events.TicketCategoryEFModel", "TicketCategory")
+                        .WithMany()
+                        .HasForeignKey("TicketCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EventSchedule");
+
+                    b.Navigation("TicketCategory");
                 });
 
             modelBuilder.Entity("TicketService.Migrations.Models.UserModelEF", b =>

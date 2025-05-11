@@ -1,9 +1,7 @@
-﻿using System.Net;
-using TicketService.ApiClient.Interface;
+﻿using TicketService.ApiClient.Interface;
 using TicketService.BL.Interface;
 using TicketService.DAL.Interface;
-using TicketService.Models.DBModels;
-using TicketService.Models.Exceptions;
+using TicketService.Models.DBModels.Events;
 using TicketService.Models.RequestModels.Event;
 using TicketService.Models.ResponseModels;
 
@@ -13,24 +11,28 @@ namespace TicketService.BL.Implementation
     {
         private readonly IEventRepository _eventRepository;
         private readonly IGoogleClient _googleClient;
+        private readonly IValidationService _validationService;
 
-        public EventService(IEventRepository eventRepository, IGoogleClient googleClient)
+        public EventService(IEventRepository eventRepository,
+            IGoogleClient googleClient,
+            IValidationService validationService)
         {
             _eventRepository = eventRepository;
             _googleClient = googleClient;
+            _validationService = validationService;
         }
 
-        public async Task AddEventAsync(AddEventRequest addEventRequest)
+        public async Task AddEventAsync(EventRequest addEventRequest)
         {
+            await _validationService.CheckEventTypeAsync(addEventRequest.EventTypeId);
             EventModel eventModel = new()
             {
                 Name = addEventRequest.Name,
                 Description = addEventRequest.Description,
                 EventTypeId = addEventRequest.EventTypeId,
-                Created = DateTime.UtcNow,
-                LastUpdated = DateTime.UtcNow,
+                DateCreated = DateTime.UtcNow,
             };
-            int id = await _eventRepository.InserEventAsync(eventModel);
+            int id = await _eventRepository.InsertEventAsync(eventModel);
             await _googleClient.UploadFileAsync(addEventRequest.Photo, $"event/{id}");
         }
 
@@ -49,55 +51,30 @@ namespace TicketService.BL.Implementation
                     Name = eventModel.Name,
                     EventTypeId = eventModel.EventTypeId,
                     ImagePath = imageUrl,
-                    Created = eventModel.Created,
-                    LastUpdated = eventModel.LastUpdated
+                    Created = eventModel.DateCreated,
+                    LastUpdated = eventModel.DateUpdated.Value,
                 }
                 );
             }
             return eventResponse;
         }
-        public async Task EditEventAsync(int id, AddEventRequest addEventRequest)
+
+        public async Task EditEventAsync(int id, EventRequest editEventRequest)
         {
-            await CheckEventAsync(id);
+            await _validationService.CheckEventAsync(id);
+            await _validationService.CheckEventTypeAsync(id);
             EventModel? eventModel = await _eventRepository.GetEventByIdAsync(id);
-            EventModel updatedEvent = new()
-            {
-                Id = id,
-                Name = addEventRequest.Name,
-                Description = addEventRequest.Description,
-                EventTypeId = addEventRequest.EventTypeId,
-                Created = eventModel.Created,
-                LastUpdated = DateTime.UtcNow,
-            };
-            await _eventRepository.EditEventAsync(updatedEvent);
+            eventModel.Name = editEventRequest.Name;
+            eventModel.DateUpdated = DateTime.UtcNow;
+            eventModel.Description = editEventRequest.Description;
+            eventModel.EventTypeId = editEventRequest.EventTypeId;
+            await _eventRepository.EditEventAsync(eventModel);
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteEventAsync(int id)
         {
-            await CheckEventAsync(id);
+            await _validationService.CheckEventAsync(id);
             await _eventRepository.DeleteEventAsync(id);
         }
-
-        #region private
-        private async Task CheckEventAsync(int id)
-        {
-            if (await _eventRepository.GetEventByIdAsync(id) == null)
-            {
-                throw new CustomException("No event with this id", HttpStatusCode.NotFound);
-            }
-        }
-
-        public Task AddEventDetailsAsync(int id, AddEventDetailsRequest addEventDetailsRequest)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<EventDetailsModel> GetEventDetailAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-        #endregion
-
-
     }
 }

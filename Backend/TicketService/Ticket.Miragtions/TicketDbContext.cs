@@ -1,5 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TicketService.Migrations.Models;
+using TicketService.Migrations.Models.Events;
+using TicketService.Migrations.Models.Order;
+using TicketService.Migrations.Models.User;
 
 
 public class TicketDbContext : DbContext
@@ -10,6 +13,12 @@ public class TicketDbContext : DbContext
     public DbSet<EventEFModel> Event { get; set; }
     public DbSet<EventDetailsEFModel> EventDetails { get; set; }
     public DbSet<OrderEFModel> Order { get; set; }
+    public DbSet<ArtistEFModel> Artist { get; set; }
+    public DbSet<ArtistScheduleEFModel> ArtistSchedule { get; set; }
+    public DbSet<EventScheduleEFModel> EventSchedule { get; set; }
+    public DbSet<TicketCategoryEFModel> TicketCategory { get; set; }
+    public DbSet<TicketEFModel> Ticket { get; set; }
+    public DbSet<EventPriceEFModel> EventPrice { get; set; }
     public TicketDbContext(DbContextOptions<TicketDbContext> options)
         : base(options)
     { }

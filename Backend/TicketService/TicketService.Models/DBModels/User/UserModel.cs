@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using TicketService.Models.Enum;
 
-namespace TicketService.Models.DBModels
+namespace TicketService.Models.DBModels.User
 {
     [Table("Users")]
     public class UserModel
@@ -18,7 +18,7 @@ namespace TicketService.Models.DBModels
         public required string LastName { get; set; }
         public bool EmailConfirmed { get; set; }
         public DateTime BirthDate { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime LastModifiedDate { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime? DateUpdated { get; set; }
     }
 }

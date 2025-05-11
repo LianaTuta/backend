@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-using System.Net;
+﻿using System.Net;
 using System.Text.Json;
+using Newtonsoft.Json;
 using TicketService.Models.Exceptions;
 
 namespace TicketService.Middleware
@@ -45,9 +45,21 @@ namespace TicketService.Middleware
                 }
                 else
                 {
-                    var apiResult = new ApiResult<dynamic>(result);
-                    var json = JsonConvert.SerializeObject(apiResult, Formatting.Indented);
-                    await httpContext.Response.WriteAsync(json); 
+                    if (httpContext.Response.StatusCode == (int)HttpStatusCode.NoContent)
+                    {
+                        httpContext.Response.StatusCode = StatusCodes.Status200OK;
+                        httpContext.Response.ContentType = "application/json";
+                        await httpContext.Response.WriteAsync("{\"Data\": null}");
+                        return;
+                    }
+                    if (httpContext.Response.StatusCode != (int)HttpStatusCode.NoContent && !httpContext.Response.HasStarted)
+                    {
+
+
+                        ApiResult<dynamic> apiResult = new(result);
+                        string json = JsonConvert.SerializeObject(apiResult, Formatting.Indented);
+                        await httpContext.Response.WriteAsync(json);
+                    }
                 }
             }
             catch (CustomException ex)

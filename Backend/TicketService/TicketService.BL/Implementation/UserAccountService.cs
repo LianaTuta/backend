@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.Net;
+﻿using System.Net;
+using Microsoft.AspNetCore.Identity;
 using TicketService.BL.Interface;
 using TicketService.DAL.Interface;
-using TicketService.Models.DBModels;
+using TicketService.Models.DBModels.User;
 using TicketService.Models.Exceptions;
 using TicketService.Models.RequestModels;
 using TicketService.Models.ResponseModels;
@@ -32,8 +32,7 @@ namespace TicketService.BL.Implementation
                 FirstName = user.FirstName,
                 MiddleName = user.LastName,
                 LastName = user.LastName,
-                LastModifiedDate = DateTime.UtcNow,
-                CreatedDate = DateTime.UtcNow,
+                DateCreated = DateTime.UtcNow,
                 BirthDate = user.BirthDate,
                 EmailConfirmed = false,
                 Password = hashedPassowrd,
@@ -44,7 +43,7 @@ namespace TicketService.BL.Implementation
         }
 
 
-        public async Task<BearerTokenModel> LoginAsync(LoginModel login)
+        public async Task<BearerTokenModel> LoginAsync(LoginRequestModel login)
         {
             UserModel? userSaved = await _userAcccountRepository.GetUserByEmailAsync(login.Email);
             if (userSaved == null || VerifyPassword(userSaved.Password, login.Password) == false)

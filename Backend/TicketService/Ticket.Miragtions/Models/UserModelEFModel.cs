@@ -12,8 +12,8 @@
         public required string LastName { get; set; }
         public bool EmailConfirmed { get; set; }
         public DateTime BirthDate { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime LastModifiedDate { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime? DateUpdated { get; set; }
 
     }
 }

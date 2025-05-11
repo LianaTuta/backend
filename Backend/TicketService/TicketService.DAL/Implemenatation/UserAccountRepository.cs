@@ -3,7 +3,7 @@ using Dapper;
 using RepoDb;
 using System.Data;
 using TicketService.DAL.Interface;
-using TicketService.Models.DBModels;
+using TicketService.Models.DBModels.User;
 
 namespace TicketService.DAL.Implemenatation
 {

@@ -6,6 +6,6 @@ namespace TicketService.BL.Interface
     public interface IUserAccountService
     {
         Task CreateAccount(CreateUserRequestModel user);
-        Task<BearerTokenModel> LoginAsync(LoginModel login);
+        Task<BearerTokenModel> LoginAsync(LoginRequestModel login);
     }
 }

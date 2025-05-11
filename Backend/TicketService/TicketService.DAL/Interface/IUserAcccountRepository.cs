@@ -1,4 +1,4 @@
-﻿using TicketService.Models.DBModels;
+﻿using TicketService.Models.DBModels.User;
 
 namespace TicketService.DAL.Interface
 {

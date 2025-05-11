@@ -1,4 +1,4 @@
-﻿namespace TicketService.Migrations.Models
+﻿namespace TicketService.Migrations.Models.Events
 {
     public class EventEFModel
     {
@@ -7,9 +7,7 @@
         public string? Description { get; set; }
         public int EventTypeId { get; set; }
         public required EventTypeEFModel EventType { get; set; }
-        public DateTime Created { get; set; }
-        public DateTime LastUpdated { get; set; }
-
-
+        public DateTime DateCreated { get; set; }
+        public DateTime? DateUpdated { get; set; }
     }
 }

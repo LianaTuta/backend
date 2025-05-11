@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TicketService.Models.DBModels
+namespace TicketService.Models.DBModels.User
 {
     [Table("UserRoles")]
     public class UserRolesModel

@@ -1,4 +1,4 @@
-﻿using TicketService.Models.DBModels;
+﻿using TicketService.Models.DBModels.Orders;
 using TicketService.Models.RequestModels.Order;
 
 namespace TicketService.BL.Interface

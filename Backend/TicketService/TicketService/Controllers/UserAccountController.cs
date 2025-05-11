@@ -25,7 +25,7 @@ namespace TicketService.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<BearerTokenModel> LoginAsync(LoginModel loginDetails)
+        public async Task<BearerTokenModel> LoginAsync(LoginRequestModel loginDetails)
         {
 
             return await _userAccountService.LoginAsync(loginDetails);

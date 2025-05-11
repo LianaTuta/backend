@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TicketService.BL.Interface;
-using TicketService.Models.DBModels;
 using TicketService.Models.RequestModels.Event;
 using TicketService.Models.ResponseModels;
 
@@ -18,7 +17,7 @@ namespace TicketService.Controllers
         }
 
         [HttpPost()]
-        public async Task AddEventAsync(AddEventRequest addEventRequest)
+        public async Task AddEventAsync(EventRequest addEventRequest)
         {
             await _eventService.AddEventAsync(addEventRequest);
         }
@@ -30,7 +29,7 @@ namespace TicketService.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task EditEventAsync(int id, AddEventRequest addEventRequest)
+        public async Task EditEventAsync(int id, EventRequest addEventRequest)
         {
             await _eventService.EditEventAsync(id, addEventRequest);
         }
@@ -38,19 +37,8 @@ namespace TicketService.Controllers
         [HttpDelete("{id}")]
         public async Task DeleteEventAsync(int id)
         {
-            await _eventService.DeleteAsync(id);
+            await _eventService.DeleteEventAsync(id);
         }
 
-        [HttpPost("add-event-details/{id}")]
-        public async Task AddEventDetails(int id, AddEventDetailsRequest addEventRequest)
-        {
-            await _eventService.AddEventDetailsAsync(id, addEventRequest);
-        }
-
-        [HttpGet("event-details/{id}")]
-        public async Task<EventDetailsModel> GetEventDetailsAsync(int id)
-        {
-            return await _eventService.GetEventDetailAsync(id);
-        }
     }
 }

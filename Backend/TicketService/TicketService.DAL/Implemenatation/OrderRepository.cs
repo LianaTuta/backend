@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RepoDb;
 using TicketService.DAL.Interface;
-using TicketService.Models.DBModels;
+using TicketService.Models.DBModels.Orders;
 
 namespace TicketService.DAL.Implemenatation
 {

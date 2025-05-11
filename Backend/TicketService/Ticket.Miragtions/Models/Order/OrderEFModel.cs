@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using TicketService.Migrations.Models.User;
 
-namespace TicketService.Migrations.Models
+namespace TicketService.Migrations.Models.Order
 {
     public class OrderEFModel
     {
         public int Id { get; set; }
         public int UserId { get; set; }
         public required UserModelEF User { get; set; }
-        public int EventId { get; set; }
-        public required EventEFModel Event { get; set; }
+        public int TicketId { get; set; }
+        public required TicketEFModel Ticket { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        
+
     }
 }

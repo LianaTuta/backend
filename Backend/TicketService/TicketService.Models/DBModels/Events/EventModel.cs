@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TicketService.Models.DBModels
+namespace TicketService.Models.DBModels.Events
 {
     [Table("Event")]
     public class EventModel
@@ -9,7 +9,7 @@ namespace TicketService.Models.DBModels
         public required string Name { get; set; }
         public required string Description { get; set; }
         public int EventTypeId { get; set; }
-        public DateTime Created { get; set; }
-        public DateTime LastUpdated { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime? DateUpdated { get; set; }
     }
 }

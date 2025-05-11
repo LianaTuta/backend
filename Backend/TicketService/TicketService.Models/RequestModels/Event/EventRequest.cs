@@ -2,7 +2,7 @@
 
 namespace TicketService.Models.RequestModels.Event
 {
-    public class AddEventRequest
+    public class EventRequest
     {
         public string? Name { get; set; }
         public string? Description { get; set; }
