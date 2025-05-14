@@ -9,11 +9,14 @@ namespace TicketService.BL.Implementation
     {
         private readonly IEventScheduleRepository _eventScheduleRepository;
         private readonly IValidationService _validationService;
+        private readonly ITicketService _ticketService;
         public EventScheduleService(IEventScheduleRepository eventScheduleRepository,
-            IValidationService validationService)
+            IValidationService validationService,
+            ITicketService ticketService)
         {
             _eventScheduleRepository = eventScheduleRepository;
             _validationService = validationService;
+            _ticketService = ticketService;
         }
         public async Task AddEventScheduleAsync(EventScheduleRequest addEventScheduleRequest)
         {
@@ -52,6 +55,7 @@ namespace TicketService.BL.Implementation
         public async Task<List<EventScheduleModel>> GetEventSchedulesByEventIdAsync(int eventId)
         {
             return await _eventScheduleRepository.GetEventSchedulesByEventIdAsync(eventId);
+
         }
     }
 }

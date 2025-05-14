@@ -20,6 +20,7 @@ builder.Services.Configure<GoogleBucketConfigurationModel>(builder.Configuration
 builder.Services.AddAuthentificationForWebApp(builder.Configuration);
 builder.Services.AddClientGoogle(builder.Configuration);
 builder.Services.AddApiClient();
+builder.Services.AddClientPayPal(builder.Configuration);
 builder.Services.AddRepositories();
 builder.Services.AddDbContext<TicketDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddServices();

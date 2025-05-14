@@ -18,7 +18,7 @@ public class TicketDbContext : DbContext
     public DbSet<EventScheduleEFModel> EventSchedule { get; set; }
     public DbSet<TicketCategoryEFModel> TicketCategory { get; set; }
     public DbSet<TicketEFModel> Ticket { get; set; }
-    public DbSet<EventPriceEFModel> EventPrice { get; set; }
+    public DbSet<TicketPriceEFModel> TicketPrice { get; set; }
     public TicketDbContext(DbContextOptions<TicketDbContext> options)
         : base(options)
     { }

@@ -52,7 +52,7 @@ namespace TicketService.BL.Implementation
                     EventTypeId = eventModel.EventTypeId,
                     ImagePath = imageUrl,
                     Created = eventModel.DateCreated,
-                    LastUpdated = eventModel.DateUpdated.Value,
+                    LastUpdated = eventModel.DateUpdated,
                 }
                 );
             }

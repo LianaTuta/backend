@@ -2,7 +2,7 @@
 
 namespace TicketService.Migrations.Models.Events
 {
-    public class EventPriceEFModel
+    public class TicketPriceEFModel
     {
         public int Id { get; set; }
         public double Price { get; set; }

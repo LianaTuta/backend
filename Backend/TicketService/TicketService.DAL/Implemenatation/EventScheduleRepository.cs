@@ -31,11 +31,13 @@ namespace TicketService.DAL.Implemenatation
 
         public async Task<List<EventScheduleModel>> GetEventSchedulesByEventIdAsync(int eventId)
         {
+
             return (await _dbConnection.QueryAsync<EventScheduleModel>(u => u.EventId == eventId)).ToList();
         }
 
         public async Task<EventScheduleModel> GetEventScheduleByIdAsync(int id)
         {
+
             return (await _dbConnection.QueryAsync<EventScheduleModel>(u => u.Id == id)).ToList().FirstOrDefault();
         }
 

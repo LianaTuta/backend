@@ -16,6 +16,8 @@ namespace TicketService.BL.IOC
             _ = services.AddTransient<IEventScheduleService, EventScheduleService>();
             _ = services.AddTransient<IEventTypeService, EventTypeService>();
             _ = services.AddTransient<IValidationService, ValidationService>();
+            _ = services.AddTransient<ITicketService, TicketsService>();
+            _ = services.AddTransient<ITicketCategoryService, TicketCategoryService>();
             return services;
         }
     }

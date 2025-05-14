@@ -12,6 +12,6 @@ namespace TicketService.Migrations.Models.User
         public int EventScheduleId { get; set; }
         public required EventScheduleEFModel EventSchedule { get; set; }
         public DateTime DateCreated { get; set; }
-        public DateTime DateUpdated { get; set; }
+        public DateTime? DateUpdated { get; set; }
     }
 }

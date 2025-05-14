@@ -1,5 +1,8 @@
-﻿namespace TicketService.Models.DBModels.Events
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace TicketService.Models.DBModels.Events
 {
+    [Table("Ticket")]
     public class TicketModel
     {
         public int Id { get; set; }

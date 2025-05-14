@@ -5,8 +5,9 @@ using System.Text;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Storage.V1;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
+using MySql.Data.MySqlClient;
+using PayPal.Api;
 using RepoDb;
 using TicketService.Middleware;
 using TicketService.Models.Configuration;
@@ -73,5 +74,26 @@ namespace TicketService.Extensions
 
             return services;
         }
+        public static IServiceCollection AddClientPayPal(this IServiceCollection services, IConfiguration configuration)
+        {
+            _ = services.AddTransient(provider =>
+            {
+                PayPalSettings? settings = configuration.GetSection("PayPal").Get<PayPalSettings>();
+                Dictionary<string, string> config = new()
+                {
+                    { "clientId", settings.ClientId },
+                    { "clientSecret", settings.Secret },
+                    { "mode", settings.Mode }
+                }
+                ;
+                string accessToken = new OAuthTokenCredential(settings.ClientId, settings.Secret, config).GetAccessToken();
+                APIContext apiContext = new(accessToken);
+                return apiContext;
+            });
+
+            return services;
+        }
+
+
     }
 }

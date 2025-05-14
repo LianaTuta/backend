@@ -8,6 +8,6 @@
         public int EventTypeId { get; set; }
         public required string ImagePath { get; set; }
         public DateTime Created { get; set; }
-        public DateTime LastUpdated { get; set; }
+        public DateTime? LastUpdated { get; set; }
     }
 }
