@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Google.Cloud.SecretManager.V1" Version="2.5.0" />
     <PackageReference Include="Google.Cloud.Storage.V1" Version="4.13.0" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.3">
@@ -33,12 +34,6 @@
     <ProjectReference Include="..\TicketService.BL\TicketService.BL.csproj" />
     <ProjectReference Include="..\TicketService.DAL\TicketService.DAL.csproj" />
     <ProjectReference Include="..\TicketService.Models\TicketService.Models.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="credentials\bucket-credentials.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
 </Project>

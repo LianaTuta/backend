@@ -5,8 +5,8 @@ using System.Text;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Storage.V1;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
-using MySql.Data.MySqlClient;
 using PayPal.Api;
 using RepoDb;
 using TicketService.Middleware;
@@ -42,11 +42,13 @@ namespace TicketService.Extensions
 
         public static IServiceCollection AddDatabaseConnection(this IServiceCollection services, IConfiguration configuration)
         {
+            RetrieveDatabaseConnection(configuration);
             _ = services.AddTransient<IDbConnection>(sp =>
                  new SqlConnection(configuration.GetConnectionString("DefaultConnection")));
             _ = GlobalConfiguration.Setup().UseSqlServer();
             return services;
         }
+
 
         public static IApplicationBuilder UserMiddleware(this IApplicationBuilder builder)
         {
@@ -59,21 +61,22 @@ namespace TicketService.Extensions
 
         public static IServiceCollection AddClientGoogle(this IServiceCollection services, IConfiguration configuration)
         {
+            string bucketcredentials = SecretManagerExtension.GetSecret("Bucket-Credentials");
             _ = services.AddTransient(provider =>
             {
-                GoogleBucketConfigurationModel? credentialPath = configuration.GetSection("GoogleCloud").Get<GoogleBucketConfigurationModel>();
-                GoogleCredential credential = GoogleCredential.FromFile(credentialPath.CredentialFile);
+
+                GoogleCredential credential = GoogleCredential.FromJson(bucketcredentials);
                 return StorageClient.Create(credential);
             });
             _ = services.AddTransient(provider =>
             {
-                GoogleBucketConfigurationModel? credentialPath = configuration.GetSection("GoogleCloud").Get<GoogleBucketConfigurationModel>();
-                GoogleCredential credential = GoogleCredential.FromFile(credentialPath.CredentialFile);
+                GoogleCredential credential = GoogleCredential.FromJson(bucketcredentials);
                 return UrlSigner.FromCredential(credential);
             });
 
             return services;
         }
+
         public static IServiceCollection AddClientPayPal(this IServiceCollection services, IConfiguration configuration)
         {
             _ = services.AddTransient(provider =>
@@ -94,6 +97,11 @@ namespace TicketService.Extensions
             return services;
         }
 
-
+        private static void RetrieveDatabaseConnection(IConfiguration configuration)
+        {
+            string environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
+            string secretName = environment == "Development" ? "Sql-Connection-String-Local" : "Sql-Connection-String";
+            configuration["ConnectionStrings:DefaultConnection"] = SecretManagerExtension.GetSecret(secretName);
+        }
     }
 }

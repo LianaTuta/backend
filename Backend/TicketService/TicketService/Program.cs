@@ -14,6 +14,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGeneration();
 
 builder.Services.AddDatabaseConnection(builder.Configuration);
+
+SecretManagerExtension.InjectJsonSecretAsConfigSection(builder, "JwtSetiings", "JwtSettings");
 builder.Services.Configure<JwtSettingsModel>(builder.Configuration.GetSection("JwtSettings"));
 builder.Services.Configure<GoogleBucketConfigurationModel>(builder.Configuration.GetSection("GoogleCloud"));
 
