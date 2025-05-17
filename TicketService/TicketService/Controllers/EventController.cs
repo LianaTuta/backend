@@ -16,6 +16,7 @@ namespace TicketService.Controllers
             _eventService = eventService;
         }
 
+
         [HttpPost()]
         public async Task AddEventAsync(EventRequest addEventRequest)
         {
