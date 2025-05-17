@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using Dapper;
+using Microsoft.Extensions.Logging;
 using RepoDb;
 using TicketService.DAL.Interface;
 using TicketService.Models.DBModels.Events;
@@ -9,10 +10,12 @@ namespace TicketService.DAL.Implemenatation
     public class EventRepository : IEventRepository
     {
         private readonly IDbConnection _dbConnection;
+        private readonly ILogger<EventRepository> _logger;
 
-        public EventRepository(IDbConnection dbConnection)
+        public EventRepository(IDbConnection dbConnection, ILogger<EventRepository> logger)
         {
             _dbConnection = dbConnection;
+            _logger = logger;
         }
 
         public async Task<int> InsertEventAsync(EventModel eventModel)
@@ -33,6 +36,8 @@ namespace TicketService.DAL.Implemenatation
 
         public async Task<List<EventModel>> GetEventsAsync()
         {
+
+            _logger.LogInformation($"Using DB connection string: {_dbConnection.ConnectionString}");
             return (await _dbConnection.QueryAllAsync<EventModel>()).ToList();
         }
 

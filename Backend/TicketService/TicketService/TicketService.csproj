@@ -30,9 +30,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Ticket.Miragtions\TicketService.Migrations.csproj" />
     <ProjectReference Include="..\TicketService.BL\TicketService.BL.csproj" />
     <ProjectReference Include="..\TicketService.DAL\TicketService.DAL.csproj" />
+    <ProjectReference Include="..\TicketService.Migrations\TicketService.Migrations.csproj" />
     <ProjectReference Include="..\TicketService.Models\TicketService.Models.csproj" />
   </ItemGroup>
 

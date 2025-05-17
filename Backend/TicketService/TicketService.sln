@@ -11,9 +11,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketService.DAL", "Ticket
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketService.Models", "TicketService.Models\TicketService.Models.csproj", "{62D27555-90E5-45D0-A66A-24EECDA769C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketService.Migrations", "Ticket.Miragtions\TicketService.Migrations.csproj", "{205E9E7F-EBF9-491E-A14C-C9424BA7375D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketService.ApiClient", "TicketService.ApiClient\TicketService.ApiClient.csproj", "{B6BE6389-764F-41C1-8F3F-E553F9D10F28}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+	ProjectSection(SolutionItems) = preProject
+		Dockerfile = Dockerfile
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketService.Migrations", "TicketService.Migrations\TicketService.Migrations.csproj", "{FE39D7ED-F7F3-9988-0116-540111514B51}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,14 +42,14 @@ Global
 		{62D27555-90E5-45D0-A66A-24EECDA769C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62D27555-90E5-45D0-A66A-24EECDA769C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62D27555-90E5-45D0-A66A-24EECDA769C7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{205E9E7F-EBF9-491E-A14C-C9424BA7375D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{205E9E7F-EBF9-491E-A14C-C9424BA7375D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{205E9E7F-EBF9-491E-A14C-C9424BA7375D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{205E9E7F-EBF9-491E-A14C-C9424BA7375D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B6BE6389-764F-41C1-8F3F-E553F9D10F28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B6BE6389-764F-41C1-8F3F-E553F9D10F28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6BE6389-764F-41C1-8F3F-E553F9D10F28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6BE6389-764F-41C1-8F3F-E553F9D10F28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE39D7ED-F7F3-9988-0116-540111514B51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE39D7ED-F7F3-9988-0116-540111514B51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE39D7ED-F7F3-9988-0116-540111514B51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE39D7ED-F7F3-9988-0116-540111514B51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

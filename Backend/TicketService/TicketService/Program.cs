@@ -15,6 +15,9 @@ builder.Services.AddSwaggerGeneration();
 
 builder.Services.AddDatabaseConnection(builder.Configuration);
 
+string? aux = builder.Configuration.GetConnectionString("DefaultConnection");
+Console.WriteLine(aux);
+
 SecretManagerExtension.InjectJsonSecretAsConfigSection(builder, "JwtSetiings", "JwtSettings");
 builder.Services.Configure<JwtSettingsModel>(builder.Configuration.GetSection("JwtSettings"));
 builder.Services.Configure<GoogleBucketConfigurationModel>(builder.Configuration.GetSection("GoogleCloud"));
@@ -29,11 +32,10 @@ builder.Services.AddServices();
 
 WebApplication app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    _ = app.UseSwagger();
-    _ = app.UseSwaggerUI();
-}
+
+_ = app.UseSwagger();
+_ = app.UseSwaggerUI();
+
 app.UserMiddleware();
 
 app.UseHttpsRedirection();

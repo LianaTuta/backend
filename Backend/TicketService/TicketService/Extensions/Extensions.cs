@@ -100,6 +100,7 @@ namespace TicketService.Extensions
         private static void RetrieveDatabaseConnection(IConfiguration configuration)
         {
             string environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
+
             string secretName = environment == "Development" ? "Sql-Connection-String-Local" : "Sql-Connection-String";
             configuration["ConnectionStrings:DefaultConnection"] = SecretManagerExtension.GetSecret(secretName);
         }
