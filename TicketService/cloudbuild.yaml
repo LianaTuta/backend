@@ -3,7 +3,7 @@ options:
 steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/$PROJECT_ID/ticket-service', '.']
-    dir: 'Backend/TicketService'  # 👈 this is the fix
+    dir: 'TicketService' 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/ticket-service']
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
