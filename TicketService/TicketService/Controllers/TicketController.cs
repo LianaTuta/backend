@@ -42,5 +42,6 @@ namespace TicketService.Controllers
         {
             await _ticketService.DeleteTicketAsync(id);
         }
+
     }
 }

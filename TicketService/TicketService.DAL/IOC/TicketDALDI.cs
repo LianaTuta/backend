@@ -16,6 +16,7 @@ namespace TicketService.DAL.IOC
             _ = services.AddScoped<IEventDetailsRepository, EventDetailsRepository>();
             _ = services.AddScoped<ITicketCategoryRepository, TicketCategoryRepository>();
             _ = services.AddScoped<ITicketRepository, TicketRepository>();
+            _ = services.AddScoped<IUserPaymentRepository, UserPaymentRepository>();
             return services;
         }
     }

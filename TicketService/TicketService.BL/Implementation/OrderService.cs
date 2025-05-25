@@ -1,6 +1,8 @@
-﻿using TicketService.BL.Interface;
+﻿using System.Text.Json;
+using TicketService.BL.Interface;
 using TicketService.DAL.Interface;
 using TicketService.Models.DBModels.Orders;
+using TicketService.Models.Enum;
 using TicketService.Models.RequestModels.Order;
 
 namespace TicketService.BL.Implementation
@@ -15,27 +17,52 @@ namespace TicketService.BL.Implementation
 
 
 
-        public Task CheckProductAvailability(OrderModel orderModel)
+        public Task CheckProductAvailability(CheckoutOrderModel orderModel)
         {
             throw new NotImplementedException();
         }
 
-        public async Task SaveOrderAsync(int userId, OrderRequest orderModel)
+        public async Task<int> InsertDefaultOrdersAsync(int userId, CheckoutRequest checkoutRequest)
         {
-            OrderModel order = new()
+            int checkoutOrderId = await SaveCheckoutOrderAsync(userId, checkoutRequest);
+            foreach (OrderTicketsModel ticketOrder in checkoutRequest.OrderTickets)
             {
-                EventId = orderModel.EventId,
-
-                UserId = userId,
-                StartDate = orderModel.StartDate,
-            };
-            await _orderRepository.InserOrderAsync(order);
+                TicketOrderModel ticket = new()
+                {
+                    TicketId = ticketOrder.Id,
+                    StartDate = DateTime.UtcNow,
+                    CheckoutOrderId = checkoutOrderId,
+                };
+                await _orderRepository.InsertTicketOrderAsync(ticket);
+            }
+            return checkoutOrderId;
         }
 
-        public Task SaveOrderAsync(OrderRequest orderModel)
+
+        public async Task UpdateUserOrderAsync(int checkoutOrderId)
         {
-            throw new NotImplementedException();
+            await _orderRepository.UpdateCheckoutOrderAsync(checkoutOrderId, (int)OrderStep.Order);
         }
+
+
+        #region private 
+
+        private async Task<int> SaveCheckoutOrderAsync(int userId, CheckoutRequest orderModel)
+        {
+
+
+            CheckoutOrderModel order = new()
+            {
+                UserId = userId,
+                Step = (int)OrderStep.Initial,
+                DateCreated = DateTime.UtcNow,
+                Order = JsonSerializer.Serialize(orderModel),
+            };
+            return await _orderRepository.InserCheckoutOrderAsync(order);
+        }
+
+
+        #endregion
     }
 }
 

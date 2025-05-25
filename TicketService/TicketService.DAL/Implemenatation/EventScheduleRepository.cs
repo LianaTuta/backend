@@ -1,22 +1,20 @@
-﻿using System.Data;
-using RepoDb;
+﻿using Dapper.FastCrud;
+using Npgsql;
+using TicketService.DAL.DBConnection;
 using TicketService.DAL.Interface;
 using TicketService.Models.DBModels.Events;
 
 namespace TicketService.DAL.Implemenatation
 {
-    public class EventScheduleRepository : IEventScheduleRepository
+    public class EventScheduleRepository : BaseRepository, IEventScheduleRepository
     {
-
-        private readonly IDbConnection _dbConnection;
-
-        public EventScheduleRepository(IDbConnection dbConnection)
+        public EventScheduleRepository(NpgsqlConnection connection) : base(connection)
         {
-            _dbConnection = dbConnection;
         }
+
         public async Task InsertEventScheduleAsync(EventScheduleModel eventSchedule)
         {
-            _ = await _dbConnection.InsertAsync(eventSchedule);
+            await _dbConnection.InsertAsync(eventSchedule);
         }
 
         public async Task EditEventScheduleAsync(EventScheduleModel eventSchedule)
@@ -26,19 +24,25 @@ namespace TicketService.DAL.Implemenatation
 
         public async Task DeleteEventScheduleByIdAsync(int id)
         {
-            _ = await _dbConnection.DeleteAsync<EventScheduleModel>(id);
+            _ = await _dbConnection.DeleteAsync(new EventScheduleModel { Id = id });
         }
 
         public async Task<List<EventScheduleModel>> GetEventSchedulesByEventIdAsync(int eventId)
         {
 
-            return (await _dbConnection.QueryAsync<EventScheduleModel>(u => u.EventId == eventId)).ToList();
+            return (await _dbConnection.FindAsync<EventScheduleModel>(statement =>
+                    statement
+                    .Where($"{nameof(EventScheduleModel.EventId):C} = @EventId")
+                    .WithParameters(new { EventId = eventId }))).ToList();
         }
 
         public async Task<EventScheduleModel> GetEventScheduleByIdAsync(int id)
         {
 
-            return (await _dbConnection.QueryAsync<EventScheduleModel>(u => u.Id == id)).ToList().FirstOrDefault();
+            return (await _dbConnection.FindAsync<EventScheduleModel>(statement =>
+                    statement
+                    .Where($"{nameof(EventScheduleModel.Id):C} = @Id")
+                    .WithParameters(new { Id = id }))).FirstOrDefault();
         }
 
 

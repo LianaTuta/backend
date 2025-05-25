@@ -1,28 +1,29 @@
-﻿using System.Data;
-using RepoDb;
+﻿using Dapper.FastCrud;
+using Npgsql;
+using TicketService.DAL.DBConnection;
 using TicketService.DAL.Interface;
 using TicketService.Models.DBModels.Events;
 
 namespace TicketService.DAL.Implemenatation
 {
-    public class EventDetailsRepository : IEventDetailsRepository
+    public class EventDetailsRepository : BaseRepository, IEventDetailsRepository
     {
-        private readonly IDbConnection _dbConnection;
-
-        public EventDetailsRepository(IDbConnection dbConnection)
+        public EventDetailsRepository(NpgsqlConnection connection) : base(connection)
         {
-            _dbConnection = dbConnection;
         }
 
         public async Task InsertEventDetailsAsync(EventDetailsModel eventDetails)
         {
-            _ = await _dbConnection.InsertAsync(eventDetails);
+            await _dbConnection.InsertAsync(eventDetails);
         }
 
         public async Task<EventDetailsModel?> GetEventDetailsByEventIdAsync(int eventId)
         {
 
-            return (await _dbConnection.QueryAsync<EventDetailsModel>(u => u.EventId == eventId)).FirstOrDefault();
+            return (await _dbConnection.FindAsync<EventDetailsModel>(statement =>
+                statement
+            .Where($"{nameof(EventDetailsModel.EventId):C} = @EventId")
+            .WithParameters(new { EventId = eventId }))).FirstOrDefault();
         }
     }
 }

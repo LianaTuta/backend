@@ -9,5 +9,6 @@ namespace TicketService.BL.Interface
         Task EditTicketAsync(int id, TicketRequestModel ticket);
         Task DeleteTicketAsync(int id);
         Task<List<TicketModel>> GetTicketsByEventScheduleIdAsync(int eventScheduleId);
+        Task GenerateTicketAsync(int userId);
     }
 }

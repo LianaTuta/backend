@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using TicketService.BL.Interface;
 using TicketService.Models.Configuration;
 
@@ -16,12 +16,12 @@ namespace TicketService.BL.Implementation
             _jwtSettingsModel = jwtSettingsModel.Value;
         }
 
-        public string GenerateJwtToken(int id, string role)
+        public string GenerateJwtToken(string email, string role)
         {
             SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(_jwtSettingsModel.SecretKey));
             SigningCredentials credentials = new(key, SecurityAlgorithms.HmacSha256);
 
-            List<Claim> claims = [new Claim("id", id.ToString()), new Claim("role", role)];
+            List<Claim> claims = [new Claim("email", email), new Claim("role", role)];
             JwtSecurityToken token = new(
                 issuer: _jwtSettingsModel.ValidIssuer,
                 audience: _jwtSettingsModel.ValidAudience,
@@ -32,5 +32,7 @@ namespace TicketService.BL.Implementation
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+
     }
 }

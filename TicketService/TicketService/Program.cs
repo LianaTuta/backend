@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TicketService.ApiClient.IOC;
+using TicketService.BL.Implementation.Template.IOC;
 using TicketService.BL.IOC;
 using TicketService.DAL.IOC;
 using TicketService.Extensions;
@@ -13,21 +14,25 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGeneration();
 
+
+Environment.SetEnvironmentVariable("GOOGLE_CLOUD_PROJECT", "bold-oasis-458708-t3");
+
 builder.Services.AddDatabaseConnection(builder.Configuration);
 
-string? aux = builder.Configuration.GetConnectionString("DefaultConnection");
-Console.WriteLine(aux);
 
 SecretManagerExtension.InjectJsonSecretAsConfigSection(builder, "JwtSetiings", "JwtSettings");
+SecretManagerExtension.InjectJsonSecretAsConfigSection(builder, "StripeCredentials", "StripeCredentials");
+Extensions.AddStripe(builder.Configuration);
 builder.Services.Configure<JwtSettingsModel>(builder.Configuration.GetSection("JwtSettings"));
+builder.Services.Configure<StripeCredentials>(builder.Configuration.GetSection("StripeCredentials"));
 builder.Services.Configure<GoogleBucketConfigurationModel>(builder.Configuration.GetSection("GoogleCloud"));
 
 builder.Services.AddAuthentificationForWebApp(builder.Configuration);
 builder.Services.AddClientGoogle(builder.Configuration);
+builder.Services.AddTemplate();
 builder.Services.AddApiClient();
-builder.Services.AddClientPayPal(builder.Configuration);
 builder.Services.AddRepositories();
-builder.Services.AddDbContext<TicketDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<TicketDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddServices();
 
 WebApplication app = builder.Build();
