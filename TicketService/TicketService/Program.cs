@@ -18,7 +18,7 @@ builder.Services.AddSwaggerGeneration();
 Environment.SetEnvironmentVariable("GOOGLE_CLOUD_PROJECT", "bold-oasis-458708-t3");
 
 builder.Services.AddDatabaseConnection(builder.Configuration);
-
+QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
 SecretManagerExtension.InjectJsonSecretAsConfigSection(builder, "JwtSetiings", "JwtSettings");
 SecretManagerExtension.InjectJsonSecretAsConfigSection(builder, "StripeCredentials", "StripeCredentials");

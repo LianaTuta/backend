@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using TicketService.Models.DBModels.Events;
 
 namespace TicketService.Models.DBModels.Orders
 {
@@ -15,7 +16,9 @@ namespace TicketService.Models.DBModels.Orders
         public int CheckoutOrderId { get; set; }
 
         [Column("ticket_id")]
+        [ForeignKey("Ticket")]
         public int TicketId { get; set; }
+        public TicketModel? Ticket { get; set; }
 
         [Column("start_date")]
         public DateTime StartDate { get; set; }

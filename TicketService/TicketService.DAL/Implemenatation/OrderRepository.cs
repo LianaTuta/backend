@@ -3,7 +3,9 @@ using Npgsql;
 using NpgsqlTypes;
 using TicketService.DAL.DBConnection;
 using TicketService.DAL.Interface;
+using TicketService.Models.DBModels.Events;
 using TicketService.Models.DBModels.Orders;
+using TicketService.Models.DBModels.Payments;
 
 namespace TicketService.DAL.Implemenatation
 {
@@ -40,9 +42,11 @@ namespace TicketService.DAL.Implemenatation
         {
             return (await _dbConnection.FindAsync<TicketOrderModel>(statement =>
                     statement
+                    .Include<TicketModel>(join => join.WithAlias("Ticket").InnerJoin())
                     .Where($"{nameof(TicketOrderModel.CheckoutOrderId):C} = @checkoutOrderId")
                     .WithParameters(new { checkoutOrderId }))).ToList();
         }
+
         public async Task UpdateCheckoutOrderAsync(int checkoutOrderId, int status)
         {
 
@@ -57,5 +61,16 @@ namespace TicketService.DAL.Implemenatation
             _ = command.Parameters.AddWithValue("id", checkoutOrderId);
             _ = await command.ExecuteNonQueryAsync();
         }
+
+
+        public async Task<int> GetCheckoutOrderByPaymentIdAsync(int paymentId)
+        {
+            return (await _dbConnection.FindAsync<PaymentModel>(statement => statement
+                                    .WithAlias("payment")
+                                    .Include<CheckoutOrderModel>(join => join.InnerJoin().WithAlias("checkout"))
+                                    .Where($@"{nameof(PaymentModel.Id):of payment} = @paymentId")
+                                    .WithParameters(new { paymentId }))).ToList().Select(o => o.CheckoutOrder.Id).FirstOrDefault();
+        }
+
     }
 }

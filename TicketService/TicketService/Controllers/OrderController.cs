@@ -12,10 +12,13 @@ namespace TicketService.Controllers
     public class OrderController : BaseController
     {
         private readonly ICheckoutService _checkoutService;
+        private readonly IQRTicketService _qRTicketService;
         public OrderController(IUserAcccountRepository userAcccountRepository,
-            ICheckoutService checkoutService) : base(userAcccountRepository)
+            ICheckoutService checkoutService,
+            IQRTicketService qRTicketService) : base(userAcccountRepository)
         {
             _checkoutService = checkoutService;
+            _qRTicketService = qRTicketService;
         }
 
         [HttpPost()]
@@ -29,6 +32,13 @@ namespace TicketService.Controllers
         public async Task CancelOrderAsync(CheckoutRequest checkoutRequest)
         {
             await _checkoutService.CancelOrderAsync(2, checkoutRequest);
+        }
+
+
+        [HttpPost("ticket-order")]
+        public async Task TickerOrderAsync(CheckoutRequest checkoutRequest)
+        {
+            await _qRTicketService.GenerateTicketAsync(1, 25);
         }
 
 

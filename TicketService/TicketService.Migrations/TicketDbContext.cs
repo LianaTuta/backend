@@ -20,8 +20,8 @@ public class TicketDbContext : DbContext
     public DbSet<TicketCategoryEFModel> ticket_category { get; set; }
     public DbSet<TicketEFModel> ticket { get; set; }
 
-    public DbSet<UserPaymentsEFModel> user_payment { get; set; }
-    public DbSet<UserTicketOrderPaymenrEfModel> user_ticket_order_payment { get; set; }
+    public DbSet<PaymentsEFModel> payment { get; set; }
+    public DbSet<TicketOrderPaymenrEfModel> ticket_order_payment { get; set; }
     public TicketDbContext(DbContextOptions<TicketDbContext> options)
         : base(options)
     { }
@@ -64,11 +64,11 @@ public class TicketDbContext : DbContext
                     .Property(t => t.Order)
                     .HasColumnType("jsonb");
 
-        _ = modelBuilder.Entity<UserPaymentsEFModel>()
+        _ = modelBuilder.Entity<PaymentsEFModel>()
                   .Property(t => t.Request)
                   .HasColumnType("jsonb");
 
-        _ = modelBuilder.Entity<UserPaymentsEFModel>()
+        _ = modelBuilder.Entity<PaymentsEFModel>()
                   .Property(t => t.Response)
                   .HasColumnType("jsonb");
 
@@ -82,15 +82,20 @@ public class TicketDbContext : DbContext
        .WithMany()
        .HasForeignKey(u => u.TicketId);
 
-        _ = modelBuilder.Entity<UserPaymentsEFModel>()
+        _ = modelBuilder.Entity<PaymentsEFModel>()
                 .HasOne(u => u.UserModel)
                 .WithMany()
                 .HasForeignKey(u => u.UserId);
 
-        _ = modelBuilder.Entity<UserTicketOrderPaymenrEfModel>()
+        _ = modelBuilder.Entity<TicketOrderPaymenrEfModel>()
       .HasOne(u => u.TicketOrder)
       .WithMany()
       .HasForeignKey(u => u.TickerOrderId);
+
+        _ = modelBuilder.Entity<PaymentsEFModel>()
+            .HasOne(u => u.CheckoutOrder)
+            .WithMany()
+        .HasForeignKey(u => u.CheckoutOrderId);
 
         base.OnModelCreating(modelBuilder);
     }

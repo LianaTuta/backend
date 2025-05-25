@@ -26,6 +26,15 @@ namespace TicketService.DAL.Implemenatation
 
         }
 
+        public async Task<UserModel?> GetUserByIdAsync(int id)
+        {
+            return (await _dbConnection.FindAsync<UserModel>(statement =>
+        statement
+            .Where($"{nameof(UserModel.Id):C} = @id")
+            .WithParameters(new { id }))).ToList().FirstOrDefault();
+
+        }
+
         public async Task<UserRolesModel> GetUserRolesById(int id)
         {
             return (await _dbConnection.FindAsync<UserRolesModel>(statement =>

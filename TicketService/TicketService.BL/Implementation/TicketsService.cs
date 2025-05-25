@@ -10,7 +10,8 @@ namespace TicketService.BL.Implementation
         private readonly ITicketRepository _ticketRepository;
         private readonly IValidationService _validationService;
 
-        public TicketsService(ITicketRepository ticketRepository, IValidationService validationService)
+        public TicketsService(ITicketRepository ticketRepository,
+            IValidationService validationService)
         {
             _ticketRepository = ticketRepository;
             _validationService = validationService;
@@ -65,9 +66,6 @@ namespace TicketService.BL.Implementation
             return await _ticketRepository.GetTicketsByEventScheduleIdAsync(eventScheduleId);
         }
 
-        public async Task GenerateTicketAsync(int userId)
-        {
-            _ = await Task.FromResult(0);
-        }
+
     }
 }

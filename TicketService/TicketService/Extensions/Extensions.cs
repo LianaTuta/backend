@@ -41,6 +41,7 @@ namespace TicketService.Extensions
             _ = services.AddScoped<NpgsqlConnection>(sp =>
             {
                 NpgsqlConnection connection = new(configuration.GetConnectionString("DefaultConnection"));
+
                 connection.Open();
                 return connection;
             });

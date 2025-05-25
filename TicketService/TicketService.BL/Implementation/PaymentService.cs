@@ -7,37 +7,60 @@ using TicketService.Models.DBModels.Orders;
 using TicketService.Models.DBModels.Payments;
 using TicketService.Models.Enum;
 using TicketService.Models.ResponseModels;
-using TicketService.Models.StripePayment;
 
 namespace TicketService.BL.Implementation
 {
     public class PaymentService : IPaymentService
     {
         private readonly IStripePaymentService _stripePaymentService;
-        private readonly IUserPaymentRepository _userPaymentRepository;
+        private readonly IPaymentRepository _paymentRepository;
         private readonly IOrderRepository _orderRepository;
         private readonly ITicketRepository _ticketRepository;
+
         public PaymentService(IStripePaymentService stripePaymentService,
-            IUserPaymentRepository userPaymentRepository,
+            IPaymentRepository paymentRepository,
             IOrderRepository orderRepository,
             ITicketRepository ticketRepository)
         {
             _stripePaymentService = stripePaymentService;
-            _userPaymentRepository = userPaymentRepository;
+            _paymentRepository = paymentRepository;
             _orderRepository = orderRepository;
             _ticketRepository = ticketRepository;
+
         }
 
         public async Task<OrderResponseModel?> CreatePaymentAsync(int userId, int checkoutOrderId)
         {
+            PaymentModel payment = await _paymentRepository.GetPaymentByCheckoutOrderIdAsync(checkoutOrderId);
+            if (payment != null)
+            {
+                if (payment.Status == (int)PaymentStatusEnum.Success)
+                {
+                    return null;
+                }
+                else
+                {
+                    if (payment.Status == (int)PaymentStatusEnum.InProgress)
+                    {
+                        return new OrderResponseModel
+                        {
+                            ReturnUrl = payment.ReturnUrl,
+                            CheckoutOrderId = checkoutOrderId,
+                            Step = OrderStep.Payment,
+                        };
+                    }
+                }
+            }
             List<TicketOrderModel> userTicketOrders = await _orderRepository.GetTicketOrderByCheckoutOrderIdAsync(checkoutOrderId);
             double amount = 0;
-            List<UserTicketOrderPayment> userticketOrderPayments = [];
+
+            ///!!!!!!!!!to be changed
+            List<TicketOrderPaymentModel> userticketOrderPayments = [];
             foreach (TicketOrderModel userTicketOrder in userTicketOrders)
             {
                 TicketModel ticket = await _ticketRepository.GetTicketByIdAsync(userTicketOrder.TicketId);
                 amount += ticket.Price.Value;
-                userticketOrderPayments.Add(new UserTicketOrderPayment()
+                userticketOrderPayments.Add(new TicketOrderPaymentModel()
                 {
                     Amount = amount,
                     TickerOrderId = userTicketOrder.Id
@@ -50,24 +73,25 @@ namespace TicketService.BL.Implementation
                 Session paymentSession = await Task.FromResult(_stripePaymentService.CreatePayment(createPaymentSessionRequest));
 
 
-                UserPaymentModel userPayment = new()
+                PaymentModel userPayment = new()
                 {
-                    PaymentId = paymentSession.Id,
+                    PaymentKey = paymentSession.Id,
                     UserId = userId,
                     Request = JsonSerializer.Serialize(createPaymentSessionRequest),
                     Response = paymentSession.RawJObject.ToString(),
-                    Status = 1,
+                    CheckoutOrderId = checkoutOrderId,
+                    Status = (int)PaymentStatusEnum.InProgress,
                     ReturnUrl = paymentSession.Url,
-                    DateCreated = DateTime.UtcNow,
+                    Amount = amount
                 };
 
-                int userPaymentId = await _userPaymentRepository.InsertPaymentAsync(userPayment);
+                int userPaymentId = await _paymentRepository.InsertPaymentAsync(userPayment);
 
-                foreach (UserTicketOrderPayment userTicketOrderPayment in userticketOrderPayments)
+                foreach (TicketOrderPaymentModel userTicketOrderPayment in userticketOrderPayments)
                 {
-                    userTicketOrderPayment.UserPaymentId = userPaymentId;
+                    userTicketOrderPayment.PaymentId = userPaymentId;
                     userTicketOrderPayment.DateCreated = DateTime.UtcNow;
-                    await _userPaymentRepository.InsertUserTicketOrderPaymentsAsync(userTicketOrderPayment);
+                    await _paymentRepository.InsertUserTicketOrderPaymentsAsync(userTicketOrderPayment);
                 }
 
                 await _orderRepository.UpdateCheckoutOrderAsync(checkoutOrderId, (int)OrderStep.Payment);
@@ -81,19 +105,12 @@ namespace TicketService.BL.Implementation
             return null;
         }
 
-
-        public async Task UpdatePaymentAsync(StripeEvent stripeEvent)
+        #region
+        private bool CheckPaymentAsync(int userId, int checkoutOrderId)
         {
-
-            string paymentId = stripeEvent.Data.Object.PaymentId;
-            string sessionStatus = stripeEvent.Data.Object.SessionStatus;
-            string paymentStatus = stripeEvent.Data.Object.PaymentStatus;
-            Console.WriteLine(sessionStatus, paymentStatus, paymentId, paymentStatus);
-            UserPaymentModel payment = await _userPaymentRepository.GetUserPaymentbyPaymentIdAsync(paymentId);
-            await _userPaymentRepository.UpdateUserPaymentStatusAsync(payment.Id, 2);
+            return true;
         }
 
-        #region
         private SessionCreateOptions CreateSessionCreateOptions(double amount)
         {
             return new()

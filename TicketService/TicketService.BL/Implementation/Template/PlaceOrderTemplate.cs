@@ -7,12 +7,13 @@ namespace TicketService.BL.Implementation.Template
     {
         private readonly IPaymentService _paymentService;
         private readonly IOrderService _orderService;
-        private readonly ITicketService _ticketService;
+        private readonly IQRTicketService _qRTicketService;
         public PlaceOrderTemplate(ITicketService ticketService,
             IOrderService orderService,
-            IPaymentService paymentService)
+            IPaymentService paymentService,
+            IQRTicketService qRTicketService)
         {
-            _ticketService = ticketService;
+            _qRTicketService = qRTicketService;
             _orderService = orderService;
             _paymentService = paymentService;
 
@@ -29,9 +30,9 @@ namespace TicketService.BL.Implementation.Template
             await _orderService.UpdateUserOrderAsync(checkoutOrderId);
         }
 
-        protected override Task HandleTicketAsync(int userId, int checkoutOrderId)
+        protected override async Task HandleTicketAsync(int userId, int checkoutOrderId)
         {
-            throw new NotImplementedException();
+            await _qRTicketService.GenerateTicketAsync(userId, checkoutOrderId);
         }
     }
 }

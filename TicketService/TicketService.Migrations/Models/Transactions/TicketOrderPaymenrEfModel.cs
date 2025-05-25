@@ -4,7 +4,7 @@ using TicketService.Migrations.Models.Order;
 
 namespace TicketService.Migrations.Models.Transactions
 {
-    public class UserTicketOrderPaymenrEfModel
+    public class TicketOrderPaymenrEfModel
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -15,9 +15,9 @@ namespace TicketService.Migrations.Models.Transactions
         public int TickerOrderId { get; set; }
         public required TicketOrderEFModel TicketOrder { get; set; }
 
-        [Column("user_payment_id")]
-        public int UserPaymentId { get; set; }
-        public required UserPaymentsEFModel UserPayment { get; set; }
+        [Column("payment_id")]
+        public int PaymentId { get; set; }
+        public required PaymentsEFModel Payment { get; set; }
 
         [Column("amount")]
         public double Amount { get; set; }

@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TicketService.Models.DBModels.Payments
 {
-    [Table("user_payment")]
-    public class UserPaymentModel
+    [Table("payment")]
+    public class PaymentModel
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -17,8 +17,16 @@ namespace TicketService.Models.DBModels.Payments
         [Column("status")]
         public int Status { get; set; }
 
+        [Column("amount")]
+        public double Amount { get; set; }
+
+        [Column("checkout_order_id")]
+        [ForeignKey("CheckoutOrder")]
+        public int CheckoutOrderId { get; set; }
+        public CheckoutOrderModel? CheckoutOrder { get; set; }
+
         [Column("payment_id")]
-        public required string PaymentId { get; set; }
+        public required string PaymentKey { get; set; }
 
         [Column("return_url")]
         public required string ReturnUrl { get; set; }

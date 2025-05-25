@@ -18,10 +18,14 @@ namespace TicketService.Models.DBModels.Events
         public string? Description { get; set; }
 
         [Column("ticket_category_id")]
+        [ForeignKey("TicketCategory")]
         public int TicketCategoryId { get; set; }
+        public TicketsCategoryModel? TicketCategory { get; set; }
 
         [Column("event_schedule_id")]
+        [ForeignKey("EventSchedule")]
         public int EventScheduleId { get; set; }
+        public EventScheduleModel? EventSchedule { get; set; }
 
         [Column("number_of_available_tickets")]
         public int NumberOfAvailableTickets { get; set; }

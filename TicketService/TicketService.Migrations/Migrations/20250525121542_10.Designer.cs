@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace TicketService.Migrations.Migrations
 {
     [DbContext(typeof(TicketDbContext))]
-    partial class TicketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250525121542_10")]
+    partial class _10
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -487,19 +490,19 @@ namespace TicketService.Migrations.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("date_updated");
 
-                    b.Property<int>("PaymentId")
-                        .HasColumnType("integer")
-                        .HasColumnName("payment_id");
-
                     b.Property<int>("TickerOrderId")
                         .HasColumnType("integer")
                         .HasColumnName("ticket_order_id");
 
+                    b.Property<int>("UserPaymentId")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_payment_id");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("PaymentId");
-
                     b.HasIndex("TickerOrderId");
+
+                    b.HasIndex("UserPaymentId");
 
                     b.ToTable("ticket_order_payment");
                 });
@@ -717,21 +720,21 @@ namespace TicketService.Migrations.Migrations
 
             modelBuilder.Entity("TicketService.Migrations.Models.Transactions.TicketOrderPaymenrEfModel", b =>
                 {
-                    b.HasOne("TicketService.Migrations.Models.Transactions.PaymentsEFModel", "Payment")
-                        .WithMany()
-                        .HasForeignKey("PaymentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("TicketService.Migrations.Models.Order.TicketOrderEFModel", "TicketOrder")
                         .WithMany()
                         .HasForeignKey("TickerOrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Payment");
+                    b.HasOne("TicketService.Migrations.Models.Transactions.PaymentsEFModel", "UserPayment")
+                        .WithMany()
+                        .HasForeignKey("UserPaymentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("TicketOrder");
+
+                    b.Navigation("UserPayment");
                 });
 
             modelBuilder.Entity("TicketService.Migrations.Models.User.UserModelEF", b =>

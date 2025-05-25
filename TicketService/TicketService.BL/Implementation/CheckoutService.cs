@@ -28,7 +28,11 @@ namespace TicketService.BL.Implementation
 
         public async Task<OrderResponseModel> ProcessOrderAsync(int userId, CheckoutRequest checkout)
         {
-            int checkoutOrderId = await _orderService.InsertDefaultOrdersAsync(userId, checkout);
+            int checkoutOrderId = checkout.CheckoutOrderId.HasValue ? checkout.CheckoutOrderId.Value : 0;
+            if (checkout.CheckoutOrderId == null)
+            {
+                checkoutOrderId = await _orderService.InsertDefaultOrdersAsync(userId, checkout);
+            }
             return await _placeOrderTemplate.ProcessOrder(userId, checkoutOrderId);
 
         }

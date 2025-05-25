@@ -14,17 +14,15 @@ namespace TicketService.Controllers
     [ApiController]
     public class PaymentRedirectController : ControllerBase
     {
-        private readonly IStripePaymentService _stripePaymentService;
-        private readonly IPaymentService _paymentService;
+        private readonly IPaymentResponseService _paymentResponseService;
         private readonly StripeCredentials _stripeCredentials;
 
-        public PaymentRedirectController(IStripePaymentService stripePaymentService,
+        public PaymentRedirectController(
             IOptions<StripeCredentials> stripeCredentials,
-            IPaymentService paymentService)
+            IPaymentResponseService paymentResponseService)
         {
-            _stripePaymentService = stripePaymentService;
             _stripeCredentials = stripeCredentials.Value;
-            _paymentService = paymentService;
+            _paymentResponseService = paymentResponseService;
         }
 
         [HttpPost("webhook")]
@@ -40,7 +38,7 @@ namespace TicketService.Controllers
                 );
                 StripeEvent? stripePaymentEvent = JsonSerializer.Deserialize<StripeEvent>(json);
 
-                await _paymentService.UpdatePaymentAsync(stripePaymentEvent);
+                await _paymentResponseService.UpdatePaymentAsync(stripePaymentEvent);
 
             }
             catch (StripeException)

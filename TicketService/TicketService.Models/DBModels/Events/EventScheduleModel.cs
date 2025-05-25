@@ -12,7 +12,9 @@ namespace TicketService.Models.DBModels.Events
         public int Id { get; set; }
 
         [Column("event_id")]
+        [ForeignKey("EventModel")]
         public int EventId { get; set; }
+        public EventModel? EventModel { get; set; }
 
         [Column("name")]
         public string? Name { get; set; }

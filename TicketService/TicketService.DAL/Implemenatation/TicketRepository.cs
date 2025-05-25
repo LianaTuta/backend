@@ -42,6 +42,17 @@ namespace TicketService.DAL.Implemenatation
                     .WithParameters(new { Id = id }))).ToList().FirstOrDefault();
         }
 
+        public async Task<TicketModel?> GetTicketDetailsByIdAsync(int id)
+        {
+            return (await _dbConnection.FindAsync<TicketModel>(statement =>
+                    statement
+                     .WithAlias("ticket")
+                     .Include<EventScheduleModel>()
+                     .Include<TicketsCategoryModel>()
+                     .Include<EventModel>(join => join.InnerJoin().WithAlias("event"))
+                     .Where($@"{nameof(TicketModel.Id):of ticket} = @id")
+                     .WithParameters(new { id }))).ToList().FirstOrDefault();
+        }
 
     }
 }

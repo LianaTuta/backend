@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using TicketService.Migrations.Models.Order;
 using TicketService.Migrations.Models.User;
 
 namespace TicketService.Migrations.Models.Transactions
 {
-    public class UserPaymentsEFModel
+    public class PaymentsEFModel
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -14,6 +15,10 @@ namespace TicketService.Migrations.Models.Transactions
         [Column("user_id")]
         public int UserId { get; set; }
         public required UserModelEF UserModel { get; set; }
+
+        [Column("checkout_order_id")]
+        public int CheckoutOrderId { get; set; }
+        public required CheckoutOrderEFModel CheckoutOrder { get; set; }
 
         [Column("status")]
         public int Status { get; set; }
@@ -25,7 +30,7 @@ namespace TicketService.Migrations.Models.Transactions
         public required double Amount { get; set; }
 
         [Column("payment_id")]
-        public required string PaymentId { get; set; }
+        public required string PaymentKey { get; set; }
 
         [Column("request")]
         public required Dictionary<string, object> Request { get; set; }

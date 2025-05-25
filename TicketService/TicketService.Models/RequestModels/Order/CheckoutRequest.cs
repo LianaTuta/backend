@@ -3,5 +3,6 @@
     public class CheckoutRequest
     {
         public required List<OrderTicketsModel> OrderTickets { get; set; }
+        public int? CheckoutOrderId { get; set; }
     }
 }

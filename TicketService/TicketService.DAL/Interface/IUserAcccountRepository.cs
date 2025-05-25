@@ -7,5 +7,7 @@ namespace TicketService.DAL.Interface
         Task InserUserAsync(UserModel userModel);
         Task<UserModel?> GetUserByEmailAsync(string email);
         Task<UserRolesModel> GetUserRolesById(int id);
+        Task<UserModel?> GetUserByIdAsync(int id);
+
     }
 }
