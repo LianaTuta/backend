@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "TicketService.Migrations": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "GOOGLE_CLOUD_PROJECT": "bold-oasis-458708-t3"
+      }
+    }
+  }
+}

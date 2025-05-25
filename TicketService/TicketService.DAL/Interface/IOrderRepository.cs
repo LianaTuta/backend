@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TicketService.Models.DBModels.Orders;
+﻿using TicketService.Models.DBModels.Orders;
 
 namespace TicketService.DAL.Interface
 {
     public interface IOrderRepository
     {
-        Task InserOrderAsync(OrderModel order);
+        Task<int> InserCheckoutOrderAsync(CheckoutOrderModel order);
+        Task InsertTicketOrderAsync(TicketOrderModel ticketOrder);
+
+        Task<List<TicketOrderModel>> GetTicketOrderByCheckoutOrderIdAsync(int checkoutOrderId);
+
+        Task UpdateCheckoutOrderAsync(int checkoutOrderId, int status);
     }
 }

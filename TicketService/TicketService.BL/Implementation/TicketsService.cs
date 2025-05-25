@@ -20,7 +20,7 @@ namespace TicketService.BL.Implementation
         {
             await _validationService.CheckTicketCategoryAsync(ticket.TicketCategoryId);
             await _validationService.CheckEventScheduleAsync(ticket.EventScheduleId);
-            TicketModel ticketModel = new()
+            TicketModel? ticketModel = new()
             {
                 Description = ticket.Description,
                 DateCreated = DateTime.UtcNow,
@@ -28,19 +28,12 @@ namespace TicketService.BL.Implementation
                 DateUpdated = null,
                 EventScheduleId = ticket.EventScheduleId,
                 TicketCategoryId = ticket.TicketCategoryId,
+                NumberOfAvailableTickets = ticket.NumberOfAvailableTickets,
+                Price = ticket.Price,
 
             };
-            if (ticket.Price != 0)
-            {
-                int ticketId = await _ticketRepository.InsertTicketAsync(ticketModel);
-                TicketPriceModel ticketPrice = new()
-                {
-                    Price = ticket.Price,
-                    TicketId = ticketId,
-                    DateCreated = DateTime.UtcNow
-                };
-                await _ticketRepository.InsertTicketPriceAsync(ticketPrice);
-            }
+            _ = await _ticketRepository.InsertTicketAsync(ticketModel);
+
         }
 
         public async Task EditTicketAsync(int id, TicketRequestModel ticket)
@@ -54,38 +47,10 @@ namespace TicketService.BL.Implementation
             currentTicket.Name = ticket.Name;
             currentTicket.EventScheduleId = ticket.EventScheduleId;
             currentTicket.DateUpdated = DateTime.UtcNow;
+            currentTicket.NumberOfAvailableTickets = ticket.NumberOfAvailableTickets;
+            currentTicket.Price = ticket.Price;
 
             await _ticketRepository.EditTicketAsync(currentTicket);
-
-            TicketPriceModel? currentTicketPrice = await _ticketRepository.GetTicketPriceByTicketIdAsync(id);
-            if (ticket.Price != 0)
-            {
-                if (currentTicketPrice == null)
-                {
-                    TicketPriceModel ticketPrice = new()
-                    {
-                        Price = ticket.Price,
-                        TicketId = id,
-                        DateCreated = DateTime.UtcNow
-                    };
-                    await _ticketRepository.InsertTicketPriceAsync(ticketPrice);
-                }
-                else
-                {
-                    currentTicketPrice.Price = ticket.Price;
-                    currentTicketPrice.DateUpdated = DateTime.UtcNow;
-                    await _ticketRepository.InsertTicketPriceAsync(currentTicketPrice);
-                }
-            }
-            else
-            {
-                if (currentTicketPrice != null)
-                {
-
-                    await _ticketRepository.DeleteTicketPriceByIdAsync(currentTicket.Id);
-                }
-
-            }
         }
 
         public async Task DeleteTicketAsync(int id)
@@ -96,7 +61,13 @@ namespace TicketService.BL.Implementation
 
         public async Task<List<TicketModel>> GetTicketsByEventScheduleIdAsync(int eventScheduleId)
         {
+
             return await _ticketRepository.GetTicketsByEventScheduleIdAsync(eventScheduleId);
+        }
+
+        public async Task GenerateTicketAsync(int userId)
+        {
+            _ = await Task.FromResult(0);
         }
     }
 }

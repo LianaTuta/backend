@@ -1,14 +1,9 @@
-﻿
-
-using System.Data;
-using System.Text;
+﻿using System.Text;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Storage.V1;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
-using PayPal.Api;
-using RepoDb;
+using Npgsql;
 using TicketService.Middleware;
 using TicketService.Models.Configuration;
 
@@ -43,9 +38,15 @@ namespace TicketService.Extensions
         public static IServiceCollection AddDatabaseConnection(this IServiceCollection services, IConfiguration configuration)
         {
             RetrieveDatabaseConnection(configuration);
-            _ = services.AddTransient<IDbConnection>(sp =>
-                 new SqlConnection(configuration.GetConnectionString("DefaultConnection")));
-            _ = GlobalConfiguration.Setup().UseSqlServer();
+            _ = services.AddScoped<NpgsqlConnection>(sp =>
+            {
+                NpgsqlConnection connection = new(configuration.GetConnectionString("DefaultConnection"));
+                connection.Open();
+                return connection;
+            });
+
+
+
             return services;
         }
 
@@ -76,33 +77,15 @@ namespace TicketService.Extensions
 
             return services;
         }
-
-        public static IServiceCollection AddClientPayPal(this IServiceCollection services, IConfiguration configuration)
+        public static void AddStripe(IConfiguration configuration)
         {
-            _ = services.AddTransient(provider =>
-            {
-                PayPalSettings? settings = configuration.GetSection("PayPal").Get<PayPalSettings>();
-                Dictionary<string, string> config = new()
-                {
-                    { "clientId", settings.ClientId },
-                    { "clientSecret", settings.Secret },
-                    { "mode", settings.Mode }
-                }
-                ;
-                string accessToken = new OAuthTokenCredential(settings.ClientId, settings.Secret, config).GetAccessToken();
-                APIContext apiContext = new(accessToken);
-                return apiContext;
-            });
-
-            return services;
+            StripeCredentials? stripeCredentials = configuration.GetSection("StripeCredentials").Get<StripeCredentials>();
+            Stripe.StripeConfiguration.ApiKey = stripeCredentials.SecretKey;
         }
 
         private static void RetrieveDatabaseConnection(IConfiguration configuration)
         {
-            string environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
-
-            string secretName = environment == "Development" ? "Sql-Connection-String-Local" : "Sql-Connection-String";
-            configuration["ConnectionStrings:DefaultConnection"] = SecretManagerExtension.GetSecret(secretName);
+            configuration["ConnectionStrings:DefaultConnection"] = SecretManagerExtension.GetSecret("ConnectionStringPostgresSql");
         }
     }
 }

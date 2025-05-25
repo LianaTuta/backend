@@ -1,22 +1,20 @@
-﻿using System.Data;
-using RepoDb;
+﻿using Dapper.FastCrud;
+using Npgsql;
+using TicketService.DAL.DBConnection;
 using TicketService.DAL.Interface;
 using TicketService.Models.DBModels.Events;
 
 namespace TicketService.DAL.Implemenatation
 {
-    public class EventTypeRepository : IEventTypeRepository
+    public class EventTypeRepository : BaseRepository, IEventTypeRepository
     {
-        private readonly IDbConnection _dbConnection;
-
-        public EventTypeRepository(IDbConnection dbConnection)
+        public EventTypeRepository(NpgsqlConnection connection) : base(connection)
         {
-            _dbConnection = dbConnection;
         }
 
         public async Task InsertEventTypeAsync(EventTypeModel eventType)
         {
-            _ = await _dbConnection.InsertAsync(eventType);
+            await _dbConnection.InsertAsync(eventType);
         }
 
         public async Task EditEventTypeAsync(EventTypeModel eventType)
@@ -26,17 +24,20 @@ namespace TicketService.DAL.Implemenatation
 
         public async Task DeleteEventTypeByIdAsync(int id)
         {
-            _ = await _dbConnection.DeleteAsync<EventTypeModel>(id);
+            _ = await _dbConnection.DeleteAsync(new EventTypeModel { Id = id });
         }
 
         public async Task<List<EventTypeModel>> GetEventTypesAsync()
         {
-            return (await _dbConnection.QueryAllAsync<EventTypeModel>()).ToList();
+            return (await _dbConnection.FindAsync<EventTypeModel>()).ToList();
         }
 
         public async Task<EventTypeModel> GetEventTypeByIdAsync(int id)
         {
-            return (await _dbConnection.QueryAsync<EventTypeModel>(u => u.Id == id)).ToList().FirstOrDefault();
+            return (await _dbConnection.FindAsync<EventTypeModel>(statement =>
+                        statement
+                    .Where($"{nameof(EventTypeModel.Id):C} = @Id")
+                    .WithParameters(new { Id = id }))).FirstOrDefault();
         }
     }
 }

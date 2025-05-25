@@ -32,6 +32,11 @@ namespace TicketService.Middleware
                 object? response = result;
                 if (httpContext.Response.StatusCode is not ((int)HttpStatusCode.Created) and not ((int)HttpStatusCode.OK) and not ((int)HttpStatusCode.NoContent))
                 {
+                    if (httpContext.Response.StatusCode is ((int)HttpStatusCode.Unauthorized))
+                    {
+                        await httpContext.Response.WriteAsync("Not allowed access");
+                        return;
+                    }
                     JsonDocument jsonDocument = JsonDocument.Parse(readToEnd);
                     if (jsonDocument.RootElement.TryGetProperty("errors", out _))
                     {

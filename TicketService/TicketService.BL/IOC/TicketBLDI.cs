@@ -18,6 +18,9 @@ namespace TicketService.BL.IOC
             _ = services.AddTransient<IValidationService, ValidationService>();
             _ = services.AddTransient<ITicketService, TicketsService>();
             _ = services.AddTransient<ITicketCategoryService, TicketCategoryService>();
+            _ = services.AddTransient<ICheckoutService, CheckoutService>();
+            _ = services.AddTransient<IPaymentService, PaymentService>();
+            _ = services.AddTransient<IStripePaymentService, StripePaymentService>();
             return services;
         }
     }

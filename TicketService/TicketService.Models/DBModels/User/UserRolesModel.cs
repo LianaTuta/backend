@@ -2,10 +2,13 @@
 
 namespace TicketService.Models.DBModels.User
 {
-    [Table("UserRoles")]
+    [Table("user_roles")]
     public class UserRolesModel
     {
+        [Column("id")]
         public int Id { get; set; }
+
+        [Column("name")]
         public string? Name { get; set; }
     }
 }

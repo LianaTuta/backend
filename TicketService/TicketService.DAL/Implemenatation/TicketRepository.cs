@@ -1,24 +1,21 @@
-﻿using System.Data;
-using Dapper;
-using RepoDb;
+﻿using Dapper.FastCrud;
+using Npgsql;
+using TicketService.DAL.DBConnection;
 using TicketService.DAL.Interface;
 using TicketService.Models.DBModels.Events;
 
 namespace TicketService.DAL.Implemenatation
 {
-    public class TicketRepository : ITicketRepository
+    public class TicketRepository : BaseRepository, ITicketRepository
     {
-
-        private readonly IDbConnection _dbConnection;
-
-        public TicketRepository(IDbConnection dbConnection)
+        public TicketRepository(NpgsqlConnection connection) : base(connection)
         {
-            _dbConnection = dbConnection;
         }
+
         public async Task<int> InsertTicketAsync(TicketModel ticket)
         {
-            int id = await _dbConnection.InsertAsync<TicketModel, int>(ticket);
-            return id;
+            await _dbConnection.InsertAsync<TicketModel>(ticket);
+            return ticket.Id;
         }
         public async Task EditTicketAsync(TicketModel ticket)
         {
@@ -26,37 +23,25 @@ namespace TicketService.DAL.Implemenatation
         }
         public async Task DeleteTicketAsync(int id)
         {
-            _ = await _dbConnection.DeleteAsync<TicketModel>(id);
+            _ = await _dbConnection.DeleteAsync(new TicketModel { Id = id });
         }
         public async Task<List<TicketModel>> GetTicketsByEventScheduleIdAsync(int eventScheduleId)
         {
 
-            return (await _dbConnection.QueryAsync<TicketModel>(u => u.EventScheduleId == eventScheduleId)).ToList();
+            return (await _dbConnection.FindAsync<TicketModel>(statement =>
+                    statement
+                    .Where($"{nameof(TicketModel.EventScheduleId):C} = @EventScheduleId")
+                    .WithParameters(new { EventScheduleId = eventScheduleId }))).ToList();
         }
 
-        public async Task<TicketModel> GetTicketByIdAsync(int id)
+        public async Task<TicketModel?> GetTicketByIdAsync(int id)
         {
-            return (await _dbConnection.QueryAsync<TicketModel>(u => u.Id == id)).FirstOrDefault();
+            return (await _dbConnection.FindAsync<TicketModel>(statement =>
+                    statement
+                    .Where($"{nameof(TicketModel.Id):C} = @Id")
+                    .WithParameters(new { Id = id }))).ToList().FirstOrDefault();
         }
 
-        public async Task InsertTicketPriceAsync(TicketPriceModel ticket)
-        {
-            _ = await _dbConnection.InsertAsync(ticket); ;
-        }
 
-        public async Task UpdateTicketPriceAsync(TicketPriceModel ticket)
-        {
-            _ = await _dbConnection.UpdateAsync(ticket);
-        }
-
-        public async Task<TicketPriceModel> GetTicketPriceByTicketIdAsync(int ticketId)
-        {
-            return (await _dbConnection.QueryAsync<TicketPriceModel>(u => u.TicketId == ticketId)).ToList().FirstOrDefault();
-        }
-
-        public async Task DeleteTicketPriceByIdAsync(int id)
-        {
-            _ = await _dbConnection.DeleteAsync<TicketPriceModel>(id);
-        }
     }
 }

@@ -1,11 +1,11 @@
-﻿using TicketService.Models.DBModels.Orders;
-using TicketService.Models.RequestModels.Order;
+﻿using TicketService.Models.RequestModels.Order;
 
 namespace TicketService.BL.Interface
 {
     public interface IOrderService
     {
-        Task SaveOrderAsync(OrderRequest orderModel);
-        Task CheckProductAvailability(OrderModel orderModel);
+        Task<int> InsertDefaultOrdersAsync(int userId, CheckoutRequest checkoutRequest);
+        Task CheckProductAvailability(CheckoutOrderModel orderModel);
+        Task UpdateUserOrderAsync(int checkoutOrderId);
     }
 }

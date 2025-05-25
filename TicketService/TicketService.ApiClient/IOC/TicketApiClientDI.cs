@@ -9,7 +9,6 @@ namespace TicketService.ApiClient.IOC
         public static IServiceCollection AddApiClient(this IServiceCollection services)
         {
             _ = services.AddScoped<IGoogleClient, GoogleClient>();
-            _ = services.AddScoped<IPayPalClient, PayPalClient>();
             return services;
         }
     }

@@ -7,5 +7,6 @@
         public int TicketCategoryId { get; set; }
         public int EventScheduleId { get; set; }
         public double Price { get; set; }
+        public int NumberOfAvailableTickets { get; set; }
     }
 }

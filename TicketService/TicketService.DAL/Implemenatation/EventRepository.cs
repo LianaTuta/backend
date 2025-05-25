@@ -1,27 +1,21 @@
-﻿using System.Data;
-using Dapper;
-using Microsoft.Extensions.Logging;
-using RepoDb;
+﻿using Dapper.FastCrud;
+using Npgsql;
+using TicketService.DAL.DBConnection;
 using TicketService.DAL.Interface;
 using TicketService.Models.DBModels.Events;
 
 namespace TicketService.DAL.Implemenatation
 {
-    public class EventRepository : IEventRepository
+    public class EventRepository : BaseRepository, IEventRepository
     {
-        private readonly IDbConnection _dbConnection;
-        private readonly ILogger<EventRepository> _logger;
-
-        public EventRepository(IDbConnection dbConnection, ILogger<EventRepository> logger)
+        public EventRepository(NpgsqlConnection connection) : base(connection)
         {
-            _dbConnection = dbConnection;
-            _logger = logger;
         }
 
         public async Task<int> InsertEventAsync(EventModel eventModel)
         {
-            int id = await _dbConnection.InsertAsync<EventModel, int>(eventModel);
-            return id;
+            await _dbConnection.InsertAsync<EventModel>(eventModel);
+            return eventModel.Id;
         }
 
         public async Task EditEventAsync(EventModel eventModel)
@@ -31,20 +25,22 @@ namespace TicketService.DAL.Implemenatation
 
         public async Task DeleteEventAsync(int id)
         {
-            _ = await _dbConnection.DeleteAsync<EventModel>(id);
+            _ = await _dbConnection.DeleteAsync(new EventModel { Id = id });
         }
 
         public async Task<List<EventModel>> GetEventsAsync()
         {
-
-            _logger.LogInformation($"Using DB connection string: {_dbConnection.ConnectionString}");
-            return (await _dbConnection.QueryAllAsync<EventModel>()).ToList();
+            return (await _dbConnection.FindAsync<EventModel>()).ToList();
         }
 
         public async Task<EventModel?> GetEventByIdAsync(int id)
         {
 
-            return (await _dbConnection.QueryAsync<EventModel>(u => u.Id == id)).FirstOrDefault();
+            return (await _dbConnection.FindAsync<EventModel>(statement =>
+                statement
+                .Where($"{nameof(EventModel.Id):C} = @id")
+                .WithParameters(new { id }))).FirstOrDefault();
+
         }
     }
 }

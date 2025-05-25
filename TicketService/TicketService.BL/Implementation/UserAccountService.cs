@@ -53,7 +53,7 @@ namespace TicketService.BL.Implementation
             UserRolesModel? role = await _userAcccountRepository.GetUserRolesById((int)userSaved.RoleId);
             return new BearerTokenModel()
             {
-                Token = _jwtService.GenerateJwtToken(userSaved.Id, role.Name)
+                Token = _jwtService.GenerateJwtToken(userSaved.Email, role.Name)
             };
         }
 

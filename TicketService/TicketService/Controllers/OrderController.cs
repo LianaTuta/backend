@@ -1,23 +1,36 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TicketService.BL.Interface;
+using TicketService.DAL.Interface;
 using TicketService.Models.RequestModels.Order;
+using TicketService.Models.ResponseModels;
 
 namespace TicketService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrderController : ControllerBase
+    public class OrderController : BaseController
     {
-        private readonly IOrderService _orderService;
-        public OrderController(IOrderService orderService)
+        private readonly ICheckoutService _checkoutService;
+        public OrderController(IUserAcccountRepository userAcccountRepository,
+            ICheckoutService checkoutService) : base(userAcccountRepository)
         {
-            _orderService = orderService;
+            _checkoutService = checkoutService;
         }
 
         [HttpPost()]
-        public async Task OrderAsync(OrderRequest addEventRequest)
+        [Authorize]
+        public async Task<OrderResponseModel> PlaceOrderAsync(CheckoutRequest checkoutRequest)
         {
-            await _orderService.SaveOrderAsync(addEventRequest);
+            return await _checkoutService.ProcessOrderAsync(await GetUserIdAsync(), checkoutRequest);
         }
+
+        [HttpPost("cancel-order")]
+        public async Task CancelOrderAsync(CheckoutRequest checkoutRequest)
+        {
+            await _checkoutService.CancelOrderAsync(2, checkoutRequest);
+        }
+
+
     }
 }

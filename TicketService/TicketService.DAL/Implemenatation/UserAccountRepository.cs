@@ -1,34 +1,37 @@
-﻿
-using Dapper;
-using RepoDb;
-using System.Data;
+﻿using Dapper.FastCrud;
+using Npgsql;
+using TicketService.DAL.DBConnection;
 using TicketService.DAL.Interface;
 using TicketService.Models.DBModels.User;
 
 namespace TicketService.DAL.Implemenatation
 {
-    public class UserAccountRepository : IUserAcccountRepository
+    public class UserAccountRepository : BaseRepository, IUserAcccountRepository
     {
-        private readonly IDbConnection _dbConnection;
-
-        public UserAccountRepository(IDbConnection dbConnection)
+        public UserAccountRepository(NpgsqlConnection connection) : base(connection)
         {
-            _dbConnection = dbConnection;
         }
+
         public async Task InserUserAsync(UserModel userModel)
         {
-            _ = await _dbConnection.InsertAsync(userModel);
+            await _dbConnection.InsertAsync(userModel);
         }
 
         public async Task<UserModel?> GetUserByEmailAsync(string email)
         {
-            return (await _dbConnection.QueryAsync<UserModel>(u => u.Email == email))?.FirstOrDefault();
+            return (await _dbConnection.FindAsync<UserModel>(statement =>
+        statement
+            .Where($"{nameof(UserModel.Email):C} = @Email")
+            .WithParameters(new { Email = email }))).ToList().FirstOrDefault();
 
         }
 
         public async Task<UserRolesModel> GetUserRolesById(int id)
         {
-            return (await _dbConnection.QueryAsync<UserRolesModel>(u => u.Id == id)).FirstOrDefault();
+            return (await _dbConnection.FindAsync<UserRolesModel>(statement =>
+                            statement
+                        .Where($"{nameof(UserRolesModel.Id):C} = @Id")
+                        .WithParameters(new { Id = id }))).ToList().FirstOrDefault();
         }
     }
 }
