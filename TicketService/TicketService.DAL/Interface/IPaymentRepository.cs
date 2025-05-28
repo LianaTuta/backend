@@ -9,5 +9,7 @@ namespace TicketService.DAL.Interface
         Task<PaymentModel> GetUserPaymentbyPaymentKeyAsync(string paymentKey);
         Task<PaymentModel> GetPaymentByCheckoutOrderIdAsync(int checkoutOrderId);
         Task InsertUserTicketOrderPaymentsAsync(TicketOrderPaymentModel payment);
+        Task<TicketOrderPaymentModel> GetTicketOrderPaymentAsync(int ticketOrderId);
+
     }
 }

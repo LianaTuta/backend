@@ -9,5 +9,7 @@ namespace TicketService.DAL.Interface
         Task<List<TicketOrderModel>> GetTicketOrderByCheckoutOrderIdAsync(int checkoutOrderId);
         Task UpdateCheckoutOrderAsync(int checkoutOrderId, int status);
         Task<int> GetCheckoutOrderByPaymentIdAsync(int paymentId);
+        Task<CheckoutOrderModel> GetOrdersByCheckoutOrderIdAsync(int userId);
+        Task<List<CheckoutOrderModel>> GetOrdersByUserIdAsync(int userId);
     }
 }

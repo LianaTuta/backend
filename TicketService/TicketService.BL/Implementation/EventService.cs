@@ -59,6 +59,24 @@ namespace TicketService.BL.Implementation
             return eventResponse;
         }
 
+        public async Task<EventsResponseModel> GetEventByIdAsync(int id)
+        {
+            await _validationService.CheckEventAsync(id);
+            EventModel? eventModel = await _eventRepository.GetEventByIdAsync(id);
+            List<string> path = await _googleClient.GetFilesAsync($"event/{eventModel.Id}/");
+            string? imageUrl = path.Any() ? _googleClient.GenerateSignedUrl(path.FirstOrDefault()) : null;
+            return new EventsResponseModel()
+            {
+                Id = eventModel.Id,
+                Description = eventModel.Description,
+                Name = eventModel.Name,
+                EventTypeId = eventModel.EventTypeId,
+                ImagePath = imageUrl,
+                Created = eventModel.DateCreated,
+                LastUpdated = eventModel.DateUpdated,
+            };
+        }
+
         public async Task EditEventAsync(int id, EventRequest editEventRequest)
         {
             await _validationService.CheckEventAsync(id);

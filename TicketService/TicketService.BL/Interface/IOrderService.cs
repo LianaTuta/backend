@@ -1,4 +1,5 @@
 ﻿using TicketService.Models.RequestModels.Order;
+using TicketService.Models.ResponseModels;
 
 namespace TicketService.BL.Interface
 {
@@ -7,5 +8,7 @@ namespace TicketService.BL.Interface
         Task<int> InsertDefaultOrdersAsync(int userId, CheckoutRequest checkoutRequest);
         Task CheckProductAvailability(CheckoutOrderModel orderModel);
         Task UpdateUserOrderAsync(int checkoutOrderId);
+        Task<List<CheckoutOrderDetailsResponseModel>> GetOrdersAsync(int userId);
+        Task<CheckoutOrderDetailsResponseModel?> GetChekoutOrderDetailsAsync(int userId, int checkoutOrderId);
     }
 }

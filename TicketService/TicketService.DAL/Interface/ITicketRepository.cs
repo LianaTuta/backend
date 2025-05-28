@@ -9,7 +9,6 @@ namespace TicketService.DAL.Interface
         Task DeleteTicketAsync(int id);
         Task<TicketModel> GetTicketByIdAsync(int id);
         Task<List<TicketModel>> GetTicketsByEventScheduleIdAsync(int eventScheduleId);
-
         Task<TicketModel?> GetTicketDetailsByIdAsync(int id);
     }
 }

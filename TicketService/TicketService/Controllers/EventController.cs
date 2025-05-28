@@ -28,6 +28,13 @@ namespace TicketService.Controllers
             return await _eventService.GetEventListAsync();
         }
 
+
+        [HttpGet("{id}")]
+        public async Task<EventsResponseModel> GetEventById(int id)
+        {
+            return await _eventService.GetEventByIdAsync(id);
+        }
+
         [HttpPut("{id}")]
         public async Task EditEventAsync(int id, EventRequest addEventRequest)
         {

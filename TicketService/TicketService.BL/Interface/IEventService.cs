@@ -9,6 +9,7 @@ namespace TicketService.BL.Interface
         Task<List<EventsResponseModel>> GetEventListAsync();
         Task EditEventAsync(int id, EventRequest addEventRequest);
         Task DeleteEventAsync(int id);
+        Task<EventsResponseModel> GetEventByIdAsync(int id);
 
     }
 }

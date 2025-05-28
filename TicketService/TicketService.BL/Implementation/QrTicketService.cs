@@ -9,6 +9,7 @@ using TicketService.DAL.Interface;
 using TicketService.Models.DBModels.Events;
 using TicketService.Models.DBModels.Orders;
 using TicketService.Models.DBModels.User;
+using TicketService.Models.Enum;
 using TicketService.Models.QR;
 
 
@@ -35,7 +36,7 @@ namespace TicketService.BL.Implementation
         public async Task GenerateTicketAsync(int userId, int checkoutOrderId)
         {
             List<TicketOrderModel> userTicketOrders = await _orderRepository.GetTicketOrderByCheckoutOrderIdAsync(checkoutOrderId);
-
+            await _orderRepository.UpdateCheckoutOrderAsync(checkoutOrderId, (int)OrderStep.QrCode);
 
             foreach (TicketOrderModel ticketOrderModel in userTicketOrders)
             {
@@ -61,6 +62,7 @@ namespace TicketService.BL.Implementation
                 IFormFile formFile = CreateFormFile(pdfBytes, $"ticket.pdf", "application/pdf");
                 await _googleClient.UploadFileAsync(formFile, $"order/{ticketOrderModel.Id}/");
             }
+            await _orderRepository.UpdateCheckoutOrderAsync(checkoutOrderId, (int)OrderStep.Completed);
         }
 
         #region

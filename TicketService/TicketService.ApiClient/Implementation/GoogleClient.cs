@@ -54,7 +54,7 @@ namespace TicketService.ApiClient.Implementation
             return _urlSigner.Sign(
                 _bucketSettings.BucketName,
                 objectName,
-                TimeSpan.FromHours(1),
+                TimeSpan.FromDays(7),
                 HttpMethod.Get);
         }
     }

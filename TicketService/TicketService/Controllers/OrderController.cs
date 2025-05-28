@@ -13,15 +13,18 @@ namespace TicketService.Controllers
     {
         private readonly ICheckoutService _checkoutService;
         private readonly IQRTicketService _qRTicketService;
+        private readonly IOrderService _orderService;
         public OrderController(IUserAcccountRepository userAcccountRepository,
             ICheckoutService checkoutService,
-            IQRTicketService qRTicketService) : base(userAcccountRepository)
+            IQRTicketService qRTicketService,
+            IOrderService orderService) : base(userAcccountRepository)
         {
             _checkoutService = checkoutService;
             _qRTicketService = qRTicketService;
+            _orderService = orderService;
         }
 
-        [HttpPost()]
+        [HttpPost("place-order")]
         [Authorize]
         public async Task<OrderResponseModel> PlaceOrderAsync(CheckoutRequest checkoutRequest)
         {
@@ -31,16 +34,22 @@ namespace TicketService.Controllers
         [HttpPost("cancel-order")]
         public async Task CancelOrderAsync(CheckoutRequest checkoutRequest)
         {
-            await _checkoutService.CancelOrderAsync(2, checkoutRequest);
+            await _checkoutService.CancelOrderAsync(await GetUserIdAsync(), checkoutRequest);
         }
 
-
-        [HttpPost("ticket-order")]
-        public async Task TickerOrderAsync(CheckoutRequest checkoutRequest)
+        [HttpGet()]
+        [Authorize]
+        public async Task<List<CheckoutOrderDetailsResponseModel>> RetriveOrdersAsync()
         {
-            await _qRTicketService.GenerateTicketAsync(1, 25);
+            return await _orderService.GetOrdersAsync(await GetUserIdAsync());
         }
 
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<CheckoutOrderDetailsResponseModel> RetriveOrderDetailsAsync(int id)
+        {
+            return await _orderService.GetChekoutOrderDetailsAsync(await GetUserIdAsync(), id);
+        }
 
     }
 }

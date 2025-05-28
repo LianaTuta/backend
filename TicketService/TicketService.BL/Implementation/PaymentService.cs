@@ -54,7 +54,6 @@ namespace TicketService.BL.Implementation
             List<TicketOrderModel> userTicketOrders = await _orderRepository.GetTicketOrderByCheckoutOrderIdAsync(checkoutOrderId);
             double amount = 0;
 
-            ///!!!!!!!!!to be changed
             List<TicketOrderPaymentModel> userticketOrderPayments = [];
             foreach (TicketOrderModel userTicketOrder in userTicketOrders)
             {
@@ -62,7 +61,7 @@ namespace TicketService.BL.Implementation
                 amount += ticket.Price.Value;
                 userticketOrderPayments.Add(new TicketOrderPaymentModel()
                 {
-                    Amount = amount,
+                    Amount = (double)ticket.Price,
                     TickerOrderId = userTicketOrder.Id
                 });
             }

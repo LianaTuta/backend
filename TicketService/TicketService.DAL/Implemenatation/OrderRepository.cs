@@ -62,6 +62,13 @@ namespace TicketService.DAL.Implemenatation
             _ = await command.ExecuteNonQueryAsync();
         }
 
+        public async Task<CheckoutOrderModel> GetOrdersByCheckoutOrderIdAsync(int checkoutOrderId)
+        {
+            return (await _dbConnection.FindAsync<CheckoutOrderModel>(statement => statement
+                                  .WithAlias("checkoutOrder")
+                                  .Where($@"{nameof(CheckoutOrderModel.Id):of checkoutOrder} = @checkoutOrderId")
+                                  .WithParameters(new { checkoutOrderId }))).ToList().FirstOrDefault();
+        }
 
         public async Task<int> GetCheckoutOrderByPaymentIdAsync(int paymentId)
         {
@@ -70,6 +77,14 @@ namespace TicketService.DAL.Implemenatation
                                     .Include<CheckoutOrderModel>(join => join.InnerJoin().WithAlias("checkout"))
                                     .Where($@"{nameof(PaymentModel.Id):of payment} = @paymentId")
                                     .WithParameters(new { paymentId }))).ToList().Select(o => o.CheckoutOrder.Id).FirstOrDefault();
+        }
+
+        public async Task<List<CheckoutOrderModel>> GetOrdersByUserIdAsync(int userId)
+        {
+            return (await _dbConnection.FindAsync<CheckoutOrderModel>(statement => statement
+                                    .WithAlias("checkoutOrder")
+                                    .Where($@"{nameof(CheckoutOrderModel.UserId):of checkoutOrder} = @userId")
+                                    .WithParameters(new { userId }))).ToList();
         }
 
     }

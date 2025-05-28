@@ -13,7 +13,9 @@ namespace TicketService.Models.DBModels.Orders
         public int Id { get; set; }
 
         [Column("checkout_order_id")]
+        [ForeignKey("CheckoutOrder")]
         public int CheckoutOrderId { get; set; }
+        public CheckoutOrderModel? CheckoutOrder { get; set; }
 
         [Column("ticket_id")]
         [ForeignKey("Ticket")]

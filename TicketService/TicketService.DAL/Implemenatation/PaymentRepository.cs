@@ -68,5 +68,13 @@ namespace TicketService.DAL.Implemenatation
                   .Where($"{nameof(PaymentModel.CheckoutOrderId):C} = @checkoutOrderId")
                       .WithParameters(new { checkoutOrderId }))).ToList().FirstOrDefault();
         }
+
+        public async Task<TicketOrderPaymentModel> GetTicketOrderPaymentAsync(int ticketOrderId)
+        {
+            return (await _dbConnection.FindAsync<TicketOrderPaymentModel>(statement =>
+                  statement
+                  .Where($"{nameof(TicketOrderPaymentModel.TickerOrderId):C} = @ticketOrderId")
+                      .WithParameters(new { ticketOrderId }))).ToList().FirstOrDefault();
+        }
     }
 }
