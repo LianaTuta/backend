@@ -33,23 +33,23 @@ namespace TicketService.Controllers
 
         [HttpGet("test")]
         [AllowAnonymous]
-        public string TestAuth()
+        public void TestAuth()
         {
-            return "Test";
+
         }
 
         [HttpGet("test-m")]
         [Authorize(Roles = "Manager")]
-        public string TestManger()
+        public void TestManger()
         {
-            return "Test Manger";
+
         }
 
         [HttpGet("test-c")]
         [Authorize(Roles = "Customer")]
-        public string TestCustomer()
+        public void TestCustomer()
         {
-            return "Test C";
+
         }
     }
 }

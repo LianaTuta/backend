@@ -44,7 +44,7 @@ namespace TicketService.BL.Implementation
             currentEventSchedule.EndDate = eventScheduleRequest.EndDate;
             currentEventSchedule.Name = eventScheduleRequest.Name;
             currentEventSchedule.DateUpdated = DateTime.UtcNow;
-            await _eventScheduleRepository.InsertEventScheduleAsync(currentEventSchedule);
+            await _eventScheduleRepository.EditEventScheduleAsync(currentEventSchedule);
         }
 
         public async Task DeleteEventScheduleAsync(int id)

@@ -12,6 +12,8 @@
 
         public int EventId { get; set; }
 
+        public string? TicketDownloadUrl { get; set; }
+
         public DateTime EventScheduleStartDate { get; set; }
         public DateTime EventScheduleEndDate { get; set; }
 

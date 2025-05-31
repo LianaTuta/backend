@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using TicketService.ApiClient.Interface;
 using TicketService.BL.Interface;
 using TicketService.DAL.Interface;
 using TicketService.Models.DBModels.Events;
@@ -15,13 +16,16 @@ namespace TicketService.BL.Implementation
         private readonly IOrderRepository _orderRepository;
         private readonly IPaymentRepository _paymentRepository;
         private readonly ITicketRepository _ticketRepository;
+        private readonly IGoogleClient _googleClient;
         public OrderService(IOrderRepository orderRepository,
             IPaymentRepository paymentRepository,
-            ITicketRepository ticketRepository)
+            ITicketRepository ticketRepository,
+            IGoogleClient googleClient)
         {
             _orderRepository = orderRepository;
             _paymentRepository = paymentRepository;
             _ticketRepository = ticketRepository;
+            _googleClient = googleClient;
         }
 
         public Task CheckProductAvailability(CheckoutOrderModel orderModel)
@@ -79,6 +83,12 @@ namespace TicketService.BL.Implementation
             {
                 TicketModel? details = await _ticketRepository.GetTicketDetailsByIdAsync(ticketOrder.TicketId);
                 TicketOrderPaymentModel ticketOrderPayment = await _paymentRepository.GetTicketOrderPaymentAsync(ticketOrder.Id);
+                string? ticketDownloadUrl = null;
+                if (checkoutOrder.Step == (int)OrderStep.Completed)
+                {
+                    List<string> file = await _googleClient.GetFilesAsync($"order/{ticketOrder.Id}/");
+                    ticketDownloadUrl = file.Any() ? _googleClient.GenerateSignedUrl(file.FirstOrDefault()) : null;
+                }
                 tickerOrderDetails.Add(new OrderDetailsResponseModel()
                 {
                     EventName = details.EventSchedule.EventModel.Name,
@@ -88,6 +98,7 @@ namespace TicketService.BL.Implementation
                     EventScheduleEndDate = details.EventSchedule.EndDate,
                     EventScheduleStartDate = details.EventSchedule.StartDate,
                     Price = ticketOrderPayment.Amount,
+                    TicketDownloadUrl = ticketDownloadUrl,
                 });
             }
             CheckoutOrderDetailsResponseModel checkoutOrderDetailsResponseModel = new()

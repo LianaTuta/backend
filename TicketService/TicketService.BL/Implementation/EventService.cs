@@ -80,7 +80,7 @@ namespace TicketService.BL.Implementation
         public async Task EditEventAsync(int id, EventRequest editEventRequest)
         {
             await _validationService.CheckEventAsync(id);
-            await _validationService.CheckEventTypeAsync(id);
+            await _validationService.CheckEventTypeAsync(editEventRequest.EventTypeId);
             EventModel? eventModel = await _eventRepository.GetEventByIdAsync(id);
             eventModel.Name = editEventRequest.Name;
             eventModel.DateUpdated = DateTime.UtcNow;

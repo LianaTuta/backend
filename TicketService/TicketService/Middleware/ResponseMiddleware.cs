@@ -37,6 +37,12 @@ namespace TicketService.Middleware
                         await httpContext.Response.WriteAsync("Not allowed access");
                         return;
                     }
+
+                    if (httpContext.Response.StatusCode is ((int)HttpStatusCode.Forbidden))
+                    {
+                        await httpContext.Response.WriteAsync("Not allowed access");
+                        return;
+                    }
                     JsonDocument jsonDocument = JsonDocument.Parse(readToEnd);
                     if (jsonDocument.RootElement.TryGetProperty("errors", out _))
                     {

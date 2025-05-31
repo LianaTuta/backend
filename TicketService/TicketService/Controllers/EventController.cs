@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TicketService.BL.Interface;
 using TicketService.Models.RequestModels.Event;
 using TicketService.Models.ResponseModels;
@@ -17,6 +18,7 @@ namespace TicketService.Controllers
         }
 
         [HttpPost()]
+        [Authorize(Roles = "Manager")]
         public async Task AddEventAsync(EventRequest addEventRequest)
         {
             await _eventService.AddEventAsync(addEventRequest);
@@ -36,12 +38,14 @@ namespace TicketService.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Manager")]
         public async Task EditEventAsync(int id, EventRequest addEventRequest)
         {
             await _eventService.EditEventAsync(id, addEventRequest);
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Manager")]
         public async Task DeleteEventAsync(int id)
         {
             await _eventService.DeleteEventAsync(id);

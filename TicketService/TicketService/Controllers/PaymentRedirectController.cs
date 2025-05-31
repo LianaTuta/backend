@@ -26,8 +26,6 @@ namespace TicketService.Controllers
         }
 
         [HttpPost("webhook")]
-
-        //
         public async Task UpdatePaymentAsync()
         {
             string json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();

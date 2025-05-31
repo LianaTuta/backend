@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using TicketService.ApiClient.IOC;
 using TicketService.BL.Implementation.Template.IOC;
@@ -17,6 +18,7 @@ builder.Services.AddSwaggerGeneration();
 
 Environment.SetEnvironmentVariable("GOOGLE_CLOUD_PROJECT", "bold-oasis-458708-t3");
 
+
 builder.Services.AddDatabaseConnection(builder.Configuration);
 QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
@@ -34,7 +36,7 @@ builder.Services.AddApiClient();
 builder.Services.AddRepositories();
 builder.Services.AddDbContext<TicketDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddServices();
-
+builder.Services.AddScoped<IClaimsTransformation, SecureRoleClaimsTransformer>();
 WebApplication app = builder.Build();
 
 
