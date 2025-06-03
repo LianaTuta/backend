@@ -86,7 +86,7 @@ namespace TicketService.Extensions
 
         private static void RetrieveDatabaseConnection(IConfiguration configuration)
         {
-            configuration["ConnectionStrings:DefaultConnection"] = SecretManagerExtension.GetSecret("LocalPostgresSql");
+            configuration["ConnectionStrings:DefaultConnection"] = SecretManagerExtension.GetSecret("ConnectionStringPostgresSql");
         }
     }
 }
