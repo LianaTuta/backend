@@ -23,10 +23,7 @@ namespace TicketService.DAL.DBConnection
         {
             try
             {
-                if (_dbConnection?.State == ConnectionState.Open)
-                {
-                    _dbConnection.Close();
-                }
+
             }
             catch (Exception ex)
             {
