@@ -7,5 +7,7 @@ namespace TicketService.ApiClient.Interface
         Task UploadFileAsync(IFormFile file, string path);
         Task<List<string>> GetFilesAsync(string path);
         string GenerateSignedUrl(string path);
+
+        Task<(MemoryStream Stream, string ContentType, string FileName)> DownloadFileAsync(string objectPath);
     }
 }

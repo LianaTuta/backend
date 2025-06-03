@@ -64,7 +64,7 @@ namespace TicketService.BL.Implementation
 
                 byte[] pdfBytes = GeneratePdf(ticketQRModel, qrPng, imageBytes);
                 IFormFile formFile = CreateFormFile(pdfBytes, $"ticket.pdf", "application/pdf");
-                await _googleClient.UploadFileAsync(formFile, $"order/{ticketOrderModel.Id}/");
+                await _googleClient.UploadFileAsync(formFile, $"order/{ticketOrderModel.Id}");
             }
             await _orderRepository.UpdateCheckoutOrderAsync(checkoutOrderId, (int)OrderStep.Completed);
         }

@@ -13,5 +13,6 @@ namespace TicketService.BL.Interface
         Task<List<TicketModel>> GetTicketsByEventScheduleIdAsync(int eventScheduleId);
         Task<ValidateTicketResponseModel> GetTicketDataAsync(string code);
         Task ValidateTicketAsync(ValidateTicketRequest validateTicketRequest);
+        Task<(MemoryStream Stream, string ContentType, string FileName)> DownloadTicketAsync(int orderId);
     }
 }

@@ -1,9 +1,11 @@
 ﻿using System.Net;
+using TicketService.ApiClient.Interface;
 using TicketService.BL.Interface;
 using TicketService.DAL.Interface;
 using TicketService.Models.DBModels.Events;
 using TicketService.Models.DBModels.Orders;
 using TicketService.Models.DBModels.Payments;
+using TicketService.Models.Enum;
 using TicketService.Models.Exceptions;
 using TicketService.Models.RequestModels;
 using TicketService.Models.RequestModels.Event;
@@ -17,16 +19,19 @@ namespace TicketService.BL.Implementation
         private readonly IValidationService _validationService;
         private readonly IOrderRepository _orderRepository;
         private readonly IPaymentRepository _paymentRepository;
+        private readonly IGoogleClient _googleClient;
         public TicketsService(ITicketRepository ticketRepository,
             IValidationService validationService,
             IOrderService orderService,
             IOrderRepository orderRepository,
-            IPaymentRepository paymentRepository)
+            IPaymentRepository paymentRepository,
+            IGoogleClient googleClient)
         {
             _ticketRepository = ticketRepository;
             _validationService = validationService;
             _orderRepository = orderRepository;
             _paymentRepository = paymentRepository;
+            _googleClient = googleClient;
         }
 
         public async Task AddTicketAsync(TicketRequestModel ticket)
@@ -118,6 +123,33 @@ namespace TicketService.BL.Implementation
             ticket.Status = validateTicketRequest.Status;
             await _ticketRepository.UpdateQrCodeTicketAsync(ticket);
         }
+
+
+        public async Task<(MemoryStream Stream, string ContentType, string FileName)> DownloadTicketAsync(int orderId)
+        {
+            QrTicketModel ticket = await _ticketRepository.GetQrCodeByTicketOrderId(orderId);
+            if (ticket == null)
+            {
+                throw new CustomException("Ticket not found", HttpStatusCode.NotFound);
+            }
+
+            if (ticket.Status != (int)QrCodeEnum.Active)
+            {
+                throw new CustomException("Ticket not active", HttpStatusCode.BadRequest);
+            }
+
+            string objectPath = $"order/{orderId}/ticket.pdf";
+
+            MemoryStream stream = new();
+            (MemoryStream Stream, string ContentType, string FileName) obj = await _googleClient.DownloadFileAsync(objectPath);
+            stream.Position = 0;
+
+            string contentType = obj.ContentType ?? "application/pdf";
+            string fileName = $"ticket_order_{orderId}.pdf";
+
+            return (stream, contentType, fileName);
+        }
+
 
     }
 

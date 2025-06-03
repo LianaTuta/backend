@@ -48,28 +48,42 @@ namespace TicketService.DAL.Implemenatation
             await _dbConnection.InsertAsync(payment);
         }
 
+
         public async Task UpdateUserPaymentStatusAsync(int id, int status, string? paymentId = null)
         {
-            string sql = paymentId == null
-                ? @"UPDATE payment
-                        SET status  = @status,
-                        date_updated = NOW()
-                        WHERE id = @id;"
-                : @"UPDATE payment
-                        SET status  = @status,
-                        payment_id = @payment_id,
-                        date_updated = NOW()
-                        WHERE id = @id;";
-            await using NpgsqlCommand cmd = new(sql, _dbConnection);
-            _ = cmd.Parameters.AddWithValue("status", status);
-            _ = cmd.Parameters.AddWithValue("id", id);
-            if (paymentId != null)
+            string sql;
+            await using NpgsqlCommand cmd = new();
+
+            cmd.Connection = _dbConnection;
+
+            if (paymentId == null)
             {
-                _ = cmd.Parameters.AddWithValue("payment_id", paymentId);
+                sql = @"UPDATE payment
+                SET status = @status,
+                    date_updated = NOW()
+                WHERE id = @id;";
+                cmd.CommandText = sql;
+                _ = cmd.Parameters.AddWithValue("status", status);
+                _ = cmd.Parameters.AddWithValue("id", id);
             }
+            else
+            {
+                sql = @"UPDATE payment
+                SET status = @status,
+                    payment_id = @payment_id,
+                    date_updated = NOW()
+                WHERE id = @id;";
+                cmd.CommandText = sql;
+                _ = cmd.Parameters.AddWithValue("status", status);
+                _ = cmd.Parameters.AddWithValue("payment_id", paymentId);
+                _ = cmd.Parameters.AddWithValue("id", id);
+            }
+
+
 
             _ = await cmd.ExecuteNonQueryAsync();
         }
+
 
         public async Task<PaymentModel> GetPaymentByCheckoutOrderIdAsync(int checkoutOrderId)
         {

@@ -1,4 +1,5 @@
-﻿using Dapper.FastCrud;
+﻿using System.Data;
+using Dapper.FastCrud;
 using Npgsql;
 
 namespace TicketService.DAL.DBConnection
@@ -9,13 +10,22 @@ namespace TicketService.DAL.DBConnection
         {
             _dbConnection = connection ?? throw new ArgumentNullException(nameof(connection));
             OrmConfiguration.DefaultDialect = SqlDialect.PostgreSql;
+            if (_dbConnection.State != ConnectionState.Open)
+            {
+                _dbConnection.Open();
+            }
+
         }
 
         protected NpgsqlConnection _dbConnection { get; }
 
         public void Dispose()
         {
-            _dbConnection.Dispose();
+            if (_dbConnection.State != ConnectionState.Closed)
+            {
+                _dbConnection.Dispose();
+            }
+
         }
     }
 }

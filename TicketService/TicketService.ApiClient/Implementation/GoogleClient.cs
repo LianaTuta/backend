@@ -38,6 +38,26 @@ namespace TicketService.ApiClient.Implementation
         }
 
 
+        public async Task<(MemoryStream Stream, string ContentType, string FileName)> DownloadFileAsync(string objectPath)
+        {
+            try
+            {
+                MemoryStream stream = new();
+                Object obj = await _storageClient.DownloadObjectAsync(_bucketSettings.BucketName, objectPath, stream);
+                stream.Position = 0;
+
+                string contentType = obj.ContentType ?? "application/octet-stream";
+                string fileName = Path.GetFileName(objectPath);
+
+                return (stream, contentType, fileName);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Download failed: {ex.Message}");
+                throw;
+            }
+        }
+
 
         public async Task<List<string>> GetFilesAsync(string path)
         {
@@ -58,6 +78,11 @@ namespace TicketService.ApiClient.Implementation
                 objectName,
                 TimeSpan.FromDays(7),
                 HttpMethod.Get);
+        }
+
+        public Task DownloadFileAsync(string objectPath, string localFilePath)
+        {
+            throw new NotImplementedException();
         }
     }
 }

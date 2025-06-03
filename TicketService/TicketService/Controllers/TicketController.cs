@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TicketService.BL.Interface;
 using TicketService.Models.DBModels.Events;
+using TicketService.Models.Exceptions;
 using TicketService.Models.RequestModels;
 using TicketService.Models.RequestModels.Event;
 using TicketService.Models.ResponseModels;
@@ -58,6 +59,25 @@ namespace TicketService.Controllers
         public async Task ValidateTicketAsync(ValidateTicketRequest validateTicketResponseModel)
         {
             await _ticketService.ValidateTicketAsync(validateTicketResponseModel);
+        }
+
+        [HttpGet("download-ticket/{orderId}")]
+        [Authorize]
+        public async Task<IActionResult> DownloadTicket(int orderId)
+        {
+            try
+            {
+                (MemoryStream stream, string contentType, string fileName) = await _ticketService.DownloadTicketAsync(orderId);
+                return File(stream, contentType, fileName);
+            }
+            catch (CustomException ex)
+            {
+                return StatusCode((int)ex.StatusCode, new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal error: " + ex.Message });
+            }
         }
     }
 }
