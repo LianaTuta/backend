@@ -21,9 +21,16 @@ namespace TicketService.DAL.DBConnection
 
         public void Dispose()
         {
-            if (_dbConnection.State == ConnectionState.Closed)
+            try
             {
-                _dbConnection.Dispose();
+                if (_dbConnection?.State == ConnectionState.Open)
+                {
+                    _dbConnection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[Dispose] Error closing connection: {ex.Message}");
             }
 
         }
