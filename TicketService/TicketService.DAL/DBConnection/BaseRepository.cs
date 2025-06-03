@@ -21,7 +21,7 @@ namespace TicketService.DAL.DBConnection
 
         public void Dispose()
         {
-            if (_dbConnection.State != ConnectionState.Closed)
+            if (_dbConnection.State == ConnectionState.Closed)
             {
                 _dbConnection.Dispose();
             }
