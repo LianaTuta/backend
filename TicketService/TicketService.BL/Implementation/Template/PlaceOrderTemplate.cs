@@ -1,4 +1,5 @@
 ﻿using TicketService.BL.Interface;
+using TicketService.Models.Enum;
 using TicketService.Models.ResponseModels;
 
 namespace TicketService.BL.Implementation.Template
@@ -27,7 +28,7 @@ namespace TicketService.BL.Implementation.Template
 
         protected override async Task HandleOrderAsync(int userId, int checkoutOrderId)
         {
-            await _orderService.UpdateUserOrderAsync(checkoutOrderId);
+            await _orderService.UpdateUserOrderAsync(checkoutOrderId, (int)OrderStep.Order);
         }
 
         protected override async Task HandleTicketAsync(int userId, int checkoutOrderId)

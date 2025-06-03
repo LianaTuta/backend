@@ -38,6 +38,12 @@ namespace TicketService.DAL.Implemenatation
             await _dbConnection.InsertAsync(ticketOrder);
         }
 
+        public async Task UpdateTicketOrderAsync(TicketOrderModel ticketOrder)
+        {
+            _ = await _dbConnection.UpdateAsync(ticketOrder);
+        }
+
+
         public async Task<List<TicketOrderModel>> GetTicketOrderByCheckoutOrderIdAsync(int checkoutOrderId)
         {
             return (await _dbConnection.FindAsync<TicketOrderModel>(statement =>
@@ -85,6 +91,14 @@ namespace TicketService.DAL.Implemenatation
                                     .WithAlias("checkoutOrder")
                                     .Where($@"{nameof(CheckoutOrderModel.UserId):of checkoutOrder} = @userId")
                                     .WithParameters(new { userId }))).ToList();
+        }
+
+        public async Task<TicketOrderModel> GetTicketOrderByIdAsync(int id)
+        {
+            return (await _dbConnection.FindAsync<TicketOrderModel>(statement => statement
+                      .WithAlias("ticketOrder")
+                      .Where($@"{nameof(TicketOrderModel.Id):of ticketOrder} = @id")
+                      .WithParameters(new { id }))).ToList().FirstOrDefault();
         }
 
     }

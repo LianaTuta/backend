@@ -29,11 +29,12 @@ namespace TicketService.BL.Implementation
             string paymentId = stripeEvent.Data.Object.PaymentId;
             string sessionStatus = stripeEvent.Data.Object.SessionStatus;
             string paymentStatus = stripeEvent.Data.Object.PaymentStatus;
+
             Console.WriteLine(sessionStatus, paymentStatus, paymentId, paymentStatus);
 
             PaymentModel payment = await _paymentRepository.GetUserPaymentbyPaymentKeyAsync(paymentId);
             //map the stipervenf payment the stut to daanase payment status
-            await _paymentRepository.UpdateUserPaymentStatusAsync(payment.Id, (int)PaymentStatusEnum.Success);
+            await _paymentRepository.UpdateUserPaymentStatusAsync(payment.Id, (int)PaymentStatusEnum.Success, stripeEvent.Data.Object.PaymentIntent);
 
             int checkoutOrderId = await _orderRepository.GetCheckoutOrderByPaymentIdAsync(payment.Id);
             _ = await _placeOrderTemplate.ProcessOrder(payment.UserId, checkoutOrderId);

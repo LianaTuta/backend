@@ -1,6 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Stripe;
 using TicketService.BL.Implementation;
 using TicketService.BL.Interface;
+using CheckoutService = TicketService.BL.Implementation.CheckoutService;
+using EventService = TicketService.BL.Implementation.EventService;
 
 namespace TicketService.BL.IOC
 {
@@ -24,6 +27,8 @@ namespace TicketService.BL.IOC
 
             _ = services.AddTransient<IQRTicketService, QrTicketService>();
             _ = services.AddTransient<IPaymentResponseService, PaymenetResponseService>();
+
+            _ = services.AddTransient<RefundService>();
             return services;
         }
     }

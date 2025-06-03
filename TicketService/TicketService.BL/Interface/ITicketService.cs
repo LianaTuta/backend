@@ -1,5 +1,7 @@
 ﻿using TicketService.Models.DBModels.Events;
+using TicketService.Models.RequestModels;
 using TicketService.Models.RequestModels.Event;
+using TicketService.Models.ResponseModels;
 
 namespace TicketService.BL.Interface
 {
@@ -9,5 +11,7 @@ namespace TicketService.BL.Interface
         Task EditTicketAsync(int id, TicketRequestModel ticket);
         Task DeleteTicketAsync(int id);
         Task<List<TicketModel>> GetTicketsByEventScheduleIdAsync(int eventScheduleId);
+        Task<ValidateTicketResponseModel> GetTicketDataAsync(string code);
+        Task ValidateTicketAsync(ValidateTicketRequest validateTicketRequest);
     }
 }

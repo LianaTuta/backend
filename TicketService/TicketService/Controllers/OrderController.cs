@@ -31,10 +31,10 @@ namespace TicketService.Controllers
             return await _checkoutService.ProcessOrderAsync(await GetUserIdAsync(), checkoutRequest);
         }
 
-        [HttpPost("cancel-order")]
-        public async Task CancelOrderAsync(CheckoutRequest checkoutRequest)
+        [HttpPost("cancel-order/{checkoutOrderId}")]
+        public async Task CancelOrderAsync(int checkoutOrderId)
         {
-            await _checkoutService.CancelOrderAsync(await GetUserIdAsync(), checkoutRequest);
+            await _checkoutService.CancelOrderAsync(await GetUserIdAsync(), checkoutOrderId);
         }
 
         [HttpGet()]

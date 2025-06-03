@@ -37,8 +37,7 @@ namespace TicketService.Controllers
                     _stripeCredentials.WebhookSecret
                 );
                 StripeEvent? stripePaymentEvent = JsonSerializer.Deserialize<StripeEvent>(json);
-
-                await _paymentResponseService.UpdatePaymentAsync(stripePaymentEvent);
+                _paymentResponseService.UpdatePaymentAsync(stripePaymentEvent);
 
             }
             catch (StripeException)

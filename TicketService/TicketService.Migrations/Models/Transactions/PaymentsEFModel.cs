@@ -30,7 +30,10 @@ namespace TicketService.Migrations.Models.Transactions
         public required double Amount { get; set; }
 
         [Column("payment_id")]
+        public string? PaymentIntent { get; set; }
+        [Column("payment_key")]
         public required string PaymentKey { get; set; }
+
 
         [Column("request")]
         public required Dictionary<string, object> Request { get; set; }

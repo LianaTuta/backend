@@ -129,11 +129,34 @@ namespace TicketService.BL.Implementation
             return checkoutOrderId;
         }
 
-        public async Task UpdateUserOrderAsync(int checkoutOrderId)
+        public async Task UpdateUserOrderAsync(int checkoutOrderId, int orderStep)
         {
-            await _orderRepository.UpdateCheckoutOrderAsync(checkoutOrderId, (int)OrderStep.Order);
+            await _orderRepository.UpdateCheckoutOrderAsync(checkoutOrderId, orderStep);
         }
 
+        public async Task CancelCheckoutOrderAsync(int checkoutOrderId)
+        {
+
+            CheckoutOrderModel checkoutOrder = await _orderRepository.GetOrdersByCheckoutOrderIdAsync(checkoutOrderId);
+            if (checkoutOrder != null)
+            {
+                if (checkoutOrder.DateCreated < DateTime.UtcNow.AddMinutes(-30))
+                {
+                    await _orderRepository.UpdateCheckoutOrderAsync(checkoutOrderId, (int)OrderStep.Expired);
+                }
+                else
+                {
+                    await _orderRepository.UpdateCheckoutOrderAsync(checkoutOrderId, (int)OrderStep.Cancelled);
+                }
+            }
+            List<TicketOrderModel> ticketOrders = await _orderRepository.GetTicketOrderByCheckoutOrderIdAsync(checkoutOrderId);
+            foreach (TicketOrderModel ticketOrder in ticketOrders)
+            {
+                ticketOrder.EndDate = DateTime.UtcNow;
+                await _orderRepository.UpdateTicketOrderAsync(ticketOrder);
+            }
+
+        }
 
         #region private 
 
@@ -150,6 +173,7 @@ namespace TicketService.BL.Implementation
             };
             return await _orderRepository.InserCheckoutOrderAsync(order);
         }
+
 
 
         #endregion

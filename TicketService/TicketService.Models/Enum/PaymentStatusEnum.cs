@@ -6,5 +6,6 @@
         Success,
         Expired,
         Refunded,
+        Canceled
     }
 }

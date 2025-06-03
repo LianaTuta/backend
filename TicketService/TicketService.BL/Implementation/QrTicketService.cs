@@ -1,9 +1,9 @@
-﻿using System.Text.Json;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using QRCoder;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using TicketService.ApiClient.Interface;
+using TicketService.BL.Helpers;
 using TicketService.BL.Interface;
 using TicketService.DAL.Interface;
 using TicketService.Models.DBModels.Events;
@@ -38,6 +38,7 @@ namespace TicketService.BL.Implementation
             List<TicketOrderModel> userTicketOrders = await _orderRepository.GetTicketOrderByCheckoutOrderIdAsync(checkoutOrderId);
             await _orderRepository.UpdateCheckoutOrderAsync(checkoutOrderId, (int)OrderStep.QrCode);
 
+
             foreach (TicketOrderModel ticketOrderModel in userTicketOrders)
             {
                 UserModel? user = await _userAcccountRepository.GetUserByIdAsync(userId);
@@ -51,7 +52,10 @@ namespace TicketService.BL.Implementation
                     Price = ticketOrderModel.Ticket.Price.Value,
                     TicketCategory = ticketDetails.TicketCategory.Name,
                 };
-                byte[] qrPng = GenerateQrCodePng(JsonSerializer.Serialize(ticketQRModel));
+                string code = await InsertQrCodeAsync(ticketOrderModel.Id);
+                string frontendBaseUrl = "https://frontend-767515572560.europe-north2.run.app/validate-ticket";
+                string url = $"{frontendBaseUrl}/{code}";
+                byte[] qrPng = GenerateQrCodePng(url);
                 List<string> path = await _googleClient.GetFilesAsync($"event/{ticketDetails.EventSchedule.EventModel.Id}/");
                 string? imageUrl = path.Any() ? _googleClient.GenerateSignedUrl(path.FirstOrDefault()) : null;
 
@@ -63,6 +67,23 @@ namespace TicketService.BL.Implementation
                 await _googleClient.UploadFileAsync(formFile, $"order/{ticketOrderModel.Id}/");
             }
             await _orderRepository.UpdateCheckoutOrderAsync(checkoutOrderId, (int)OrderStep.Completed);
+        }
+
+        public async Task UpdateTicketAsync(int userId, int checkoutOrderId)
+        {
+            List<TicketOrderModel> userTicketOrders = await _orderRepository.GetTicketOrderByCheckoutOrderIdAsync(checkoutOrderId);
+            foreach (TicketOrderModel ticketOrderModel in userTicketOrders)
+            {
+                _ = await _userAcccountRepository.GetUserByIdAsync(userId);
+                _ = await _ticketRepository.GetTicketDetailsByIdAsync(ticketOrderModel.TicketId);
+                QrTicketModel qrCode = await _ticketRepository.GetQrCodeByTicketOrderId(ticketOrderModel.Id);
+                if (qrCode != null)
+                {
+                    qrCode.Status = (int)QrCodeEnum.Cancelled;
+                    await _ticketRepository.UpdateQrCodeTicketAsync(qrCode);
+                    await _orderRepository.UpdateCheckoutOrderAsync(checkoutOrderId, (int)OrderStep.Cancelled);
+                }
+            }
         }
 
         #region
@@ -144,6 +165,20 @@ namespace TicketService.BL.Implementation
             return pdfBytes;
         }
 
+        private async Task<string> InsertQrCodeAsync(int tickerOrderId)
+
+        {
+            QrTicketModel ticketQr = new()
+            {
+                Code = RandomStringHelper.Generate(16),
+                DateCreated = DateTime.UtcNow,
+                Status = (int)QrCodeEnum.Active,
+                TicketOrderId = tickerOrderId,
+            };
+            await _ticketRepository.InsertQrCodeTicketAsync(ticketQr);
+
+            return ticketQr.Code;
+        }
         #endregion
 
     }

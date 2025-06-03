@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TicketService.BL.Interface;
 using TicketService.Models.DBModels.Events;
+using TicketService.Models.RequestModels;
 using TicketService.Models.RequestModels.Event;
+using TicketService.Models.ResponseModels;
 
 namespace TicketService.Controllers
 {
@@ -43,7 +46,18 @@ namespace TicketService.Controllers
             await _ticketService.DeleteTicketAsync(id);
         }
 
+        [HttpGet("validate-ticket/{code}")]
+        [Authorize(Roles = "Manager")]
+        public async Task<ValidateTicketResponseModel> GetTicketDataAsync(string code)
+        {
+            return await _ticketService.GetTicketDataAsync(code);
+        }
 
-
+        [HttpPost("validate-ticket")]
+        [Authorize(Roles = "Manager")]
+        public async Task ValidateTicketAsync(ValidateTicketRequest validateTicketResponseModel)
+        {
+            await _ticketService.ValidateTicketAsync(validateTicketResponseModel);
+        }
     }
 }

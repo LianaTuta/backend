@@ -7,8 +7,11 @@ namespace TicketService.BL.Interface
     {
         Task<int> InsertDefaultOrdersAsync(int userId, CheckoutRequest checkoutRequest);
         Task CheckProductAvailability(CheckoutOrderModel orderModel);
-        Task UpdateUserOrderAsync(int checkoutOrderId);
+        Task UpdateUserOrderAsync(int checkoutOrderId, int orderStep);
         Task<List<CheckoutOrderDetailsResponseModel>> GetOrdersAsync(int userId);
         Task<CheckoutOrderDetailsResponseModel?> GetChekoutOrderDetailsAsync(int userId, int checkoutOrderId);
+        Task CancelCheckoutOrderAsync(int checkoutOrderId);
+
+
     }
 }

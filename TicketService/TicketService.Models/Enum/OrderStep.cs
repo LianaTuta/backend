@@ -6,6 +6,8 @@
         Payment,
         Order,
         QrCode,
-        Completed
+        Completed,
+        Cancelled,
+        Expired
     }
 }

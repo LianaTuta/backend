@@ -3,6 +3,7 @@ using Npgsql;
 using TicketService.DAL.DBConnection;
 using TicketService.DAL.Interface;
 using TicketService.Models.DBModels.Events;
+using TicketService.Models.DBModels.Orders;
 
 namespace TicketService.DAL.Implemenatation
 {
@@ -53,6 +54,35 @@ namespace TicketService.DAL.Implemenatation
                      .Where($@"{nameof(TicketModel.Id):of ticket} = @id")
                      .WithParameters(new { id }))).ToList().FirstOrDefault();
         }
+
+        public async Task InsertQrCodeTicketAsync(QrTicketModel qrTicket)
+        {
+            await _dbConnection.InsertAsync(qrTicket);
+        }
+
+
+        public async Task<QrTicketModel> GetQrCodeByTicketOrderId(int ticketOrderId)
+        {
+            return (await _dbConnection.FindAsync<QrTicketModel>(statement =>
+                   statement
+                   .Where($"{nameof(QrTicketModel.TicketOrderId):C} = @ticketOrderId")
+                   .WithParameters(new { ticketOrderId }))).ToList().FirstOrDefault();
+        }
+
+
+        public async Task UpdateQrCodeTicketAsync(QrTicketModel qrTicket)
+        {
+            _ = await _dbConnection.UpdateAsync(qrTicket);
+        }
+
+        public async Task<QrTicketModel> GetTicketByCodeAsync(string code)
+        {
+            return (await _dbConnection.FindAsync<QrTicketModel>(statement =>
+                  statement
+                  .Where($"{nameof(QrTicketModel.Code):C} = @code")
+                  .WithParameters(new { code }))).ToList().FirstOrDefault();
+        }
+
 
     }
 }

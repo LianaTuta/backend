@@ -25,8 +25,11 @@ namespace TicketService.Models.DBModels.Payments
         public int CheckoutOrderId { get; set; }
         public CheckoutOrderModel? CheckoutOrder { get; set; }
 
-        [Column("payment_id")]
+        [Column("payment_key")]
         public required string PaymentKey { get; set; }
+
+        [Column("payment_id")]
+        public string? PaymentIntent { get; set; }
 
         [Column("return_url")]
         public required string ReturnUrl { get; set; }

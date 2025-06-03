@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace TicketService.Migrations.Migrations
 {
     [DbContext(typeof(TicketDbContext))]
-    partial class TicketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250601122503_QrCode")]
+    partial class QrCode
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -467,14 +470,10 @@ namespace TicketService.Migrations.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("date_updated");
 
-                    b.Property<string>("PaymentIntent")
-                        .HasColumnType("text")
-                        .HasColumnName("payment_id");
-
                     b.Property<string>("PaymentKey")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("payment_key");
+                        .HasColumnName("payment_id");
 
                     b.Property<Dictionary<string, object>>("Request")
                         .IsRequired()

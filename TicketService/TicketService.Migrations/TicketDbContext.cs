@@ -22,6 +22,8 @@ public class TicketDbContext : DbContext
 
     public DbSet<PaymentsEFModel> payment { get; set; }
     public DbSet<TicketOrderPaymenrEfModel> ticket_order_payment { get; set; }
+
+    public DbSet<QrTicketEFModel> qr_ticket { get; set; }
     public TicketDbContext(DbContextOptions<TicketDbContext> options)
         : base(options)
     { }
@@ -96,6 +98,11 @@ public class TicketDbContext : DbContext
             .HasOne(u => u.CheckoutOrder)
             .WithMany()
         .HasForeignKey(u => u.CheckoutOrderId);
+
+        _ = modelBuilder.Entity<QrTicketEFModel>()
+          .HasOne(u => u.TicketOrder)
+          .WithMany()
+        .HasForeignKey(u => u.TicketOrderId);
 
         base.OnModelCreating(modelBuilder);
     }

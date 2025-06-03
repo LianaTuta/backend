@@ -6,29 +6,33 @@ namespace TicketService.BL.Implementation.Template
     public class CancelOrderTemplate : BaseOrderTemplate
     {
         private readonly IOrderService _orderService;
-        private readonly ITicketService _ticketService;
-        public CancelOrderTemplate(ITicketService ticketService, IOrderService orderService)
+        private readonly IQRTicketService _qRTicketService;
+        private readonly IPaymentService _paymentService;
+        public CancelOrderTemplate(IQRTicketService qRTicketService,
+            IOrderService orderService,
+            IPaymentService paymentService)
         {
-            _ticketService = ticketService;
+            _qRTicketService = qRTicketService;
             _orderService = orderService;
+            _paymentService = paymentService;
 
 
         }
 
-
-        protected override Task<OrderResponseModel> HandlePaymentAsync(int userId, int checkoutOrderId)
+        protected override async Task<OrderResponseModel>? HandlePaymentAsync(int userId, int checkoutOrderId)
         {
-            throw new NotImplementedException();
+            _ = await _paymentService.CreateRefundPaymentAsync(userId, checkoutOrderId);
+            return null;
         }
 
-        protected override Task HandleOrderAsync(int userId, int userOrderCheckoutId)
+        protected override async Task HandleOrderAsync(int userId, int userOrderCheckoutId)
         {
-            throw new NotImplementedException();
+            await _orderService.CancelCheckoutOrderAsync(userOrderCheckoutId);
         }
 
-        protected override Task HandleTicketAsync(int userId, int checkoutOrderId)
+        protected override async Task HandleTicketAsync(int userId, int checkoutOrderId)
         {
-            throw new NotImplementedException();
+            await _qRTicketService.UpdateTicketAsync(userId, checkoutOrderId);
         }
     }
 }

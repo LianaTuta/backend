@@ -11,5 +11,9 @@ namespace TicketService.DAL.Interface
         Task<int> GetCheckoutOrderByPaymentIdAsync(int paymentId);
         Task<CheckoutOrderModel> GetOrdersByCheckoutOrderIdAsync(int userId);
         Task<List<CheckoutOrderModel>> GetOrdersByUserIdAsync(int userId);
+
+        Task UpdateTicketOrderAsync(TicketOrderModel ticketOrder);
+
+        Task<TicketOrderModel> GetTicketOrderByIdAsync(int id);
     }
 }

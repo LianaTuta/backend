@@ -104,16 +104,34 @@ namespace TicketService.BL.Implementation
             return null;
         }
 
-        #region
-        private bool CheckPaymentAsync(int userId, int checkoutOrderId)
+        public async Task<OrderResponseModel?> CreateRefundPaymentAsync(int userId, int checkoutOrderId)
         {
-            return true;
+            PaymentModel payment = await _paymentRepository.GetPaymentByCheckoutOrderIdAsync(checkoutOrderId);
+
+            if (payment != null)
+            {
+                if (payment.Status == (int)PaymentStatusEnum.Success)
+                {
+                    _ = _stripePaymentService.CreateRefund(payment.PaymentIntent, (long)payment.Amount * 100);
+                    await _paymentRepository.UpdateUserPaymentStatusAsync(payment.Id, (int)PaymentStatusEnum.Refunded);
+                }
+                else
+                {
+                    await _paymentRepository.UpdateUserPaymentStatusAsync(payment.Id, (int)PaymentStatusEnum.Expired);
+                }
+            }
+            return null;
+
         }
+
+
+        #region
 
         private SessionCreateOptions CreateSessionCreateOptions(double amount)
         {
             return new()
             {
+                Expand = ["payment_intent"],
                 PaymentMethodTypes = ["card"],
                 LineItems =
             [
@@ -132,11 +150,14 @@ namespace TicketService.BL.Implementation
                 }
             ],
                 Mode = "payment",
-                SuccessUrl = "https://frontend-767515572560.europe-north2.run.app/",
-                CancelUrl = "https://frontend-767515572560.europe-north2.run.app/"
+                SuccessUrl = "https://frontend-767515572560.europe-north2.run.app/order-success",
+                CancelUrl = "https://frontend-767515572560.europe-north2.run.app/cancel-payment"
             };
 
         }
+
+
+
         #endregion
     }
 

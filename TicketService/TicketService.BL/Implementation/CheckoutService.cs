@@ -21,6 +21,12 @@ namespace TicketService.BL.Implementation
             _orderService = orderService;
         }
 
+        public async Task CancelOrderAsync(int userId, int checkoutOrderId)
+        {
+
+            _ = await _cancelOrderTemplate.ProcessOrder(userId, checkoutOrderId);
+        }
+
         public Task CancelOrderAsync(int userId, CheckoutRequest checkout)
         {
             throw new NotImplementedException();
@@ -36,7 +42,5 @@ namespace TicketService.BL.Implementation
             return await _placeOrderTemplate.ProcessOrder(userId, checkoutOrderId);
 
         }
-
-
     }
 }
