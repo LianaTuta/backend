@@ -125,7 +125,7 @@ namespace TicketService.BL.Implementation
         }
 
 
-        public async Task<(MemoryStream Stream, string ContentType, string FileName)> DownloadTicketAsync(int orderId)
+        public async Task<QrTIcketResponseMOdel> DownloadTicketAsync(int orderId)
         {
             QrTicketModel ticket = await _ticketRepository.GetQrCodeByTicketOrderId(orderId);
             if (ticket == null)
@@ -139,15 +139,9 @@ namespace TicketService.BL.Implementation
             }
 
             string objectPath = $"order/{orderId}/ticket.pdf";
-
-            MemoryStream stream = new();
-            (MemoryStream Stream, string ContentType, string FileName) obj = await _googleClient.DownloadFileAsync(objectPath);
-            stream.Position = 0;
-
-            string contentType = obj.ContentType ?? "application/pdf";
-            string fileName = $"ticket_order_{orderId}.pdf";
-
-            return (stream, contentType, fileName);
+            List<string> path = await _googleClient.GetFilesAsync(objectPath);
+            string? imageUrl = path.Any() ? _googleClient.GenerateSignedUrl(path.FirstOrDefault()) : null;
+            return new QrTIcketResponseMOdel() { DownLoadUrl = imageUrl };
         }
 
 
