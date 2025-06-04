@@ -81,7 +81,7 @@ namespace TicketService.BL.Implementation
                     CheckoutOrderId = checkoutOrderId,
                     Status = (int)PaymentStatusEnum.InProgress,
                     ReturnUrl = paymentSession.Url,
-                    Amount = amount
+                    Amount = (decimal)amount
                 };
 
                 int userPaymentId = await _paymentRepository.InsertPaymentAsync(userPayment);

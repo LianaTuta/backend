@@ -63,7 +63,7 @@ namespace TicketService.BL.Implementation
                 {
                     Details = tickerOrderDetails,
                     Step = order.Step,
-                    TotalPrice = payment.Amount,
+                    TotalPrice = (double)payment.Amount,
                     Id = order.Id,
                     PaymentUrl = payment.Status == (int)PaymentStatusEnum.InProgress ? payment.ReturnUrl : null,
                     DateCreated = order.DateCreated,
@@ -105,7 +105,7 @@ namespace TicketService.BL.Implementation
             {
                 Details = tickerOrderDetails,
                 Step = checkoutOrder.Step,
-                TotalPrice = payment.Amount,
+                TotalPrice = (double)payment.Amount,
                 Id = checkoutOrder.Id,
                 PaymentUrl = payment.Status == (int)PaymentStatusEnum.InProgress ? payment.ReturnUrl : null,
                 DateCreated = checkoutOrder.DateCreated,

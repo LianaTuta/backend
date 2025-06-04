@@ -18,7 +18,7 @@ namespace TicketService.Models.DBModels.Payments
         public int Status { get; set; }
 
         [Column("amount")]
-        public double Amount { get; set; }
+        public decimal Amount { get; set; }
 
         [Column("checkout_order_id")]
         [ForeignKey("CheckoutOrder")]

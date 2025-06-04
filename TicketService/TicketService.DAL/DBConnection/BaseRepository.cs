@@ -23,7 +23,7 @@ namespace TicketService.DAL.DBConnection
         {
             try
             {
-
+                _dbConnection.Dispose();
             }
             catch (Exception ex)
             {
