@@ -30,6 +30,19 @@ namespace TicketService.Extensions
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey))
                     };
 
+                })
+                .AddJwtBearer("GoogleOIDC", options =>
+                {
+                    options.Authority = "https://accounts.google.com";
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidIssuer = "https://accounts.google.com",
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidAudience = "https://cc82-2a02-2f05-6007-3700-f59c-1ce0-9a6-cc1c.ngrok-free.app/api/order/cancel-order-expired"
+                    };
                 });
 
             return service;
@@ -86,7 +99,7 @@ namespace TicketService.Extensions
 
         private static void RetrieveDatabaseConnection(IConfiguration configuration)
         {
-            configuration["ConnectionStrings:DefaultConnection"] = SecretManagerExtension.GetSecret("ConnectionStringPostgresSql");
+            configuration["ConnectionStrings:DefaultConnection"] = SecretManagerExtension.GetSecret("LocalPostgresSql");
         }
     }
 }

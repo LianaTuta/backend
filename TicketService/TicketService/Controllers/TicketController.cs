@@ -60,6 +60,8 @@ namespace TicketService.Controllers
             await _ticketService.ValidateTicketAsync(validateTicketResponseModel);
         }
 
+
+
         [HttpGet("download-ticket/{orderId}")]
         [Authorize]
         public async Task<QrTIcketResponseMOdel> DownloadTicket(int orderId)

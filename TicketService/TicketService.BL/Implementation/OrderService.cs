@@ -47,6 +47,7 @@ namespace TicketService.BL.Implementation
                 {
                     TicketModel? details = await _ticketRepository.GetTicketDetailsByIdAsync(ticketOrder.TicketId);
                     TicketOrderPaymentModel ticketOrderPayment = await _paymentRepository.GetTicketOrderPaymentAsync(ticketOrder.Id);
+
                     tickerOrderDetails.Add(new OrderDetailsResponseModel()
                     {
                         EventName = details.EventSchedule.EventModel.Name,
@@ -55,8 +56,9 @@ namespace TicketService.BL.Implementation
                         EventId = details.EventSchedule.EventId,
                         EventScheduleEndDate = details.EventSchedule.EndDate,
                         EventScheduleStartDate = details.EventSchedule.StartDate,
-                        Price = ticketOrderPayment.Amount,
+                        Price = ticketOrderPayment == null ? 0 : ticketOrderPayment.Amount,
                     });
+
                 }
 
                 checkoutOrderDetails.Add(new CheckoutOrderDetailsResponseModel()
@@ -97,7 +99,7 @@ namespace TicketService.BL.Implementation
                     EventId = details.EventSchedule.EventId,
                     EventScheduleEndDate = details.EventSchedule.EndDate,
                     EventScheduleStartDate = details.EventSchedule.StartDate,
-                    Price = ticketOrderPayment.Amount,
+                    Price = ticketOrderPayment == null ? 0 : ticketOrderPayment.Amount,
                     TicketDownloadUrl = ticketDownloadUrl,
                 });
             }
@@ -156,6 +158,11 @@ namespace TicketService.BL.Implementation
                 await _orderRepository.UpdateTicketOrderAsync(ticketOrder);
             }
 
+        }
+
+        public Task<List<CheckoutOrderModel>> GetExpiredOrderAsync()
+        {
+            return _orderRepository.GetExpiredOrdersAsync();
         }
 
         #region private 

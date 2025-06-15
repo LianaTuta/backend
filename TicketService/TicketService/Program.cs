@@ -24,9 +24,11 @@ QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
 SecretManagerExtension.InjectJsonSecretAsConfigSection(builder, "JwtSetiings", "JwtSettings");
 SecretManagerExtension.InjectJsonSecretAsConfigSection(builder, "StripeCredentials", "StripeCredentials");
+
 Extensions.AddStripe(builder.Configuration);
-builder.Services.Configure<JwtSettingsModel>(builder.Configuration.GetSection("JwtSettings"));
 builder.Services.Configure<StripeCredentials>(builder.Configuration.GetSection("StripeCredentials"));
+builder.Services.Configure<JwtSettingsModel>(builder.Configuration.GetSection("JwtSettings"));
+
 builder.Services.Configure<GoogleBucketConfigurationModel>(builder.Configuration.GetSection("GoogleCloud"));
 
 builder.Services.AddAuthentificationForWebApp(builder.Configuration);

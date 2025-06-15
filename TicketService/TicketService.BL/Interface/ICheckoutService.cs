@@ -7,5 +7,7 @@ namespace TicketService.BL.Interface
     {
         Task<OrderResponseModel> ProcessOrderAsync(int userId, CheckoutRequest checkout);
         Task CancelOrderAsync(int userId, int checkoutOrderId);
+
+        Task CancelExpiredOrdersAsync();
     }
 }

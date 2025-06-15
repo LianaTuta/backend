@@ -12,6 +12,8 @@ namespace TicketService.BL.Interface
         Task<CheckoutOrderDetailsResponseModel?> GetChekoutOrderDetailsAsync(int userId, int checkoutOrderId);
         Task CancelCheckoutOrderAsync(int checkoutOrderId);
 
+        Task<List<CheckoutOrderModel>> GetExpiredOrderAsync();
+
 
     }
 }

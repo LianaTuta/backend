@@ -5,8 +5,6 @@ EXPOSE 8080
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-
-
 COPY TicketService/TicketService.csproj TicketService/
 COPY TicketService.DAL/TicketService.DAL.csproj TicketService.DAL/
 COPY TicketService.BL/TicketService.BL.csproj TicketService.BL/
@@ -17,8 +15,6 @@ COPY TicketService.sln .
 
 
 RUN dotnet restore TicketService.sln
-
-
 COPY . .
 
 RUN dotnet publish TicketService/TicketService.csproj -c Release -o /app/publish

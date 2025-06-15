@@ -27,10 +27,15 @@ namespace TicketService.BL.Implementation
             _ = await _cancelOrderTemplate.ProcessOrder(userId, checkoutOrderId);
         }
 
-        public Task CancelOrderAsync(int userId, CheckoutRequest checkout)
+        public async Task CancelExpiredOrdersAsync()
         {
-            throw new NotImplementedException();
+            List<CheckoutOrderModel> expiredOrders = await _orderService.GetExpiredOrderAsync();
+            foreach (CheckoutOrderModel order in expiredOrders)
+            {
+                _ = await _cancelOrderTemplate.ProcessOrder(order.UserId, order.Id);
+            }
         }
+
 
         public async Task<OrderResponseModel> ProcessOrderAsync(int userId, CheckoutRequest checkout)
         {

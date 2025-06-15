@@ -101,5 +101,13 @@ namespace TicketService.DAL.Implemenatation
                       .WithParameters(new { id }))).ToList().FirstOrDefault();
         }
 
+        public async Task<List<CheckoutOrderModel>> GetExpiredOrdersAsync()
+        {
+            DateTime date = DateTime.UtcNow.AddMinutes(-30);
+            return (await _dbConnection.FindAsync<CheckoutOrderModel>(statement => statement
+                                 .WithAlias("checkoutOrder")
+                                 .Where($@"{nameof(CheckoutOrderModel.DateCreated):of checkoutOrder} < @date  and {nameof(CheckoutOrderModel.Step):of checkoutOrder} = 1")
+                                 .WithParameters(new { date }))).ToList();
+        }
     }
 }

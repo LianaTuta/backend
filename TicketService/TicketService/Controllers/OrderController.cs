@@ -32,9 +32,17 @@ namespace TicketService.Controllers
         }
 
         [HttpPost("cancel-order/{checkoutOrderId}")]
+        [Authorize]
         public async Task CancelOrderAsync(int checkoutOrderId)
         {
             await _checkoutService.CancelOrderAsync(await GetUserIdAsync(), checkoutOrderId);
+        }
+
+        [HttpPost("cancel-order-expired")]
+        [Authorize(AuthenticationSchemes = "GoogleOIDC")]
+        public async Task CancelExpiredOrders()
+        {
+            await _checkoutService.CancelExpiredOrdersAsync();
         }
 
         [HttpGet()]
