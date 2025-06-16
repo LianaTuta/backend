@@ -41,7 +41,7 @@ namespace TicketService.Extensions
                         ValidateAudience = true,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidAudience = "https://cc82-2a02-2f05-6007-3700-f59c-1ce0-9a6-cc1c.ngrok-free.app/api/order/cancel-order-expired"
+                        ValidAudience = "https://ticket-service-767515572560.europe-north2.run.app/api/order/cancel-order-expired"
                     };
                 });
 
