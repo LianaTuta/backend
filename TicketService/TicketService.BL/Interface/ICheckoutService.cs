@@ -9,5 +9,7 @@ namespace TicketService.BL.Interface
         Task CancelOrderAsync(int userId, int checkoutOrderId);
 
         Task CancelExpiredOrdersAsync();
+        Task<ValidTicketModel> IsValidTicket(int ticketId);
+
     }
 }

@@ -109,5 +109,15 @@ namespace TicketService.DAL.Implemenatation
                                  .Where($@"{nameof(CheckoutOrderModel.DateCreated):of checkoutOrder} < @date  and {nameof(CheckoutOrderModel.Step):of checkoutOrder} = 1")
                                  .WithParameters(new { date }))).ToList();
         }
+
+        public async Task<List<TicketOrderModel>> GetActiveOrdersAsync(int ticketId)
+        {
+            return (await _dbConnection.FindAsync<TicketOrderModel>(statement => statement
+                                    .WithAlias("ticketOrder")
+                                     .Include<TicketModel>()
+                                    .Include<CheckoutOrderModel>(join => join.InnerJoin().WithAlias("checkout"))
+                                    .Where($@"{nameof(TicketOrderModel.TicketId):of ticketOrder} = @ticketId and {nameof(CheckoutOrderModel.Step):of checkout} not in (5,6)")
+                                    .WithParameters(new { ticketId }))).ToList();
+        }
     }
 }

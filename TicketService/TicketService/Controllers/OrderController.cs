@@ -45,6 +45,13 @@ namespace TicketService.Controllers
             await _checkoutService.CancelExpiredOrdersAsync();
         }
 
+        [HttpGet("is-valid-ticket/{ticketId}")]
+        public async Task<ValidTicketModel> IsValidTicket(int ticketId)
+        {
+            return await _checkoutService.IsValidTicket(ticketId);
+        }
+
+
         [HttpGet()]
         [Authorize]
         public async Task<List<CheckoutOrderDetailsResponseModel>> RetriveOrdersAsync()

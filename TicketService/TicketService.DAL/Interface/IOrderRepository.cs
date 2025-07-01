@@ -16,5 +16,7 @@ namespace TicketService.DAL.Interface
         Task UpdateTicketOrderAsync(TicketOrderModel ticketOrder);
 
         Task<TicketOrderModel> GetTicketOrderByIdAsync(int id);
+
+        Task<List<TicketOrderModel>> GetActiveOrdersAsync(int ticketId);
     }
 }

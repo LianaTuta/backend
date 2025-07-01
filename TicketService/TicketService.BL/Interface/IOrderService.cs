@@ -1,4 +1,5 @@
-﻿using TicketService.Models.RequestModels.Order;
+﻿using TicketService.Models.DBModels.Orders;
+using TicketService.Models.RequestModels.Order;
 using TicketService.Models.ResponseModels;
 
 namespace TicketService.BL.Interface
@@ -13,6 +14,9 @@ namespace TicketService.BL.Interface
         Task CancelCheckoutOrderAsync(int checkoutOrderId);
 
         Task<List<CheckoutOrderModel>> GetExpiredOrderAsync();
+
+        Task<List<TicketOrderModel>> GetActiveOrdersAsync(int ticketId);
+        Task<ValidTicketModel> GetTicketValidity(int ticketId);
 
 
     }

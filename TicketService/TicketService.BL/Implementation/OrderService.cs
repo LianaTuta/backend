@@ -65,18 +65,17 @@ namespace TicketService.BL.Implementation
                 {
                     Details = tickerOrderDetails,
                     Step = order.Step,
-                    TotalPrice = (double)payment.Amount,
+                    TotalPrice = payment == null ? 0 : (double)payment.Amount,
                     Id = order.Id,
-                    PaymentUrl = payment.Status == (int)PaymentStatusEnum.InProgress ? payment.ReturnUrl : null,
+                    PaymentUrl = payment == null ? null : payment.Status == (int)PaymentStatusEnum.InProgress ? payment.ReturnUrl : null,
                     DateCreated = order.DateCreated,
-                });
+                }); ;
             }
             return checkoutOrderDetails;
         }
 
         public async Task<CheckoutOrderDetailsResponseModel?> GetChekoutOrderDetailsAsync(int userId, int checkoutOrderId)
         {
-            //cehck bearer validity
             CheckoutOrderModel checkoutOrder = await _orderRepository.GetOrdersByCheckoutOrderIdAsync(checkoutOrderId);
             List<OrderDetailsResponseModel> tickerOrderDetails = [];
             List<TicketOrderModel> ticketOrders = await _orderRepository.GetTicketOrderByCheckoutOrderIdAsync(checkoutOrder.Id);
@@ -107,9 +106,9 @@ namespace TicketService.BL.Implementation
             {
                 Details = tickerOrderDetails,
                 Step = checkoutOrder.Step,
-                TotalPrice = (double)payment.Amount,
+                TotalPrice = payment == null ? 0 : (double)payment.Amount,
                 Id = checkoutOrder.Id,
-                PaymentUrl = payment.Status == (int)PaymentStatusEnum.InProgress ? payment.ReturnUrl : null,
+                PaymentUrl = payment == null ? null : payment.Status == (int)PaymentStatusEnum.InProgress ? payment.ReturnUrl : null,
                 DateCreated = checkoutOrder.DateCreated,
             };
             return checkoutOrderDetailsResponseModel;
@@ -163,6 +162,24 @@ namespace TicketService.BL.Implementation
         public Task<List<CheckoutOrderModel>> GetExpiredOrderAsync()
         {
             return _orderRepository.GetExpiredOrdersAsync();
+        }
+
+        public Task<List<TicketOrderModel>> GetActiveOrdersAsync(int ticketId)
+        {
+            return _orderRepository.GetActiveOrdersAsync(ticketId);
+        }
+
+        public async Task<ValidTicketModel> GetTicketValidity(int ticketId)
+        {
+            List<TicketOrderModel> tickets = await GetActiveOrdersAsync(ticketId);
+            TicketModel ticket = await _ticketRepository.GetTicketByIdAsync(ticketId);
+            ValidTicketModel ticketOrder = new()
+            {
+                IsValid = ticket.NumberOfAvailableTickets - tickets.Count > 0,
+                RemainingTIckets = ticket.NumberOfAvailableTickets - tickets.Count,
+                SoldTickets = tickets.Count,
+            };
+            return ticketOrder;
         }
 
         #region private 
